@@ -1,0 +1,97 @@
+table dim_staff
+	lineageTag: 08cd9530-19d7-465d-94f1-256c777e1a9c
+
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: 56f49086-9a7e-4f11-8bb6-8816ff7dc7c3
+		summarizeBy: none
+		sourceColumn: id
+
+		annotation SummarizationSetBy = User
+
+	column staff_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 6c8a65cc-8486-4d00-8917-7edeeb9b0281
+		summarizeBy: none
+		sourceColumn: staff_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column first_name
+		dataType: string
+		lineageTag: 0d6664aa-b9ab-4374-beef-280b5524ec5e
+		summarizeBy: none
+		sourceColumn: first_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column last_name
+		dataType: string
+		lineageTag: 4638794b-8819-41be-8941-088a9d12a8f0
+		summarizeBy: none
+		sourceColumn: last_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column designation
+		dataType: string
+		lineageTag: 1c4d7236-96c4-48ee-9aee-f119d54d84f1
+		summarizeBy: none
+		sourceColumn: designation
+
+		annotation SummarizationSetBy = Automatic
+
+	column department
+		dataType: string
+		lineageTag: 8985d904-38da-43dd-9d12-c1c5029b1d3c
+		summarizeBy: none
+		sourceColumn: department
+
+		annotation SummarizationSetBy = Automatic
+
+	column gender
+		dataType: string
+		lineageTag: c0f8eb42-d094-4e8e-a439-315f0b78d8e8
+		summarizeBy: none
+		sourceColumn: gender
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_by
+		dataType: string
+		lineageTag: eeaa8708-4a60-4192-b21d-7fae800a9abd
+		summarizeBy: none
+		sourceColumn: created_by
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 596edda1-dd58-4ccb-a047-f2800331ca91
+		summarizeBy: none
+		sourceColumn: created_at
+
+		variation Variation
+			isDefault
+			relationship: a4920fcf-4589-479a-ba44-59dbd99f22e2
+			defaultHierarchy: LocalDateTable_112e6da4-9aaa-4043-8981-80951acdddd3.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_staff = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("10.10.10.73", "school_db_olap_final"),
+				    dbo_v_dim_staff = Source{[Schema="dbo",Item="v_dim_staff"]}[Data],
+				    #"Renamed Columns" = Table.RenameColumns(dbo_v_dim_staff,{{"staff_key", "staff_id"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

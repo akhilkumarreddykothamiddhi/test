@@ -1,0 +1,254 @@
+table fact_payments
+	lineageTag: 124887c7-95b8-4c51-aaf7-54f82f26fd9f
+
+	measure 'NCC Intake' =
+			
+			CALCULATE(
+			    DISTINCTCOUNT(dim_student[student_key]),
+			    dim_achievement_type[category] = "Leadership Award"
+			)
+		formatString: 0
+		lineageTag: 210b7924-9296-41d2-8341-926e679f40a9
+
+	measure '% NCC Intake' =
+			
+			DIVIDE(
+			    CALCULATE(
+			        DISTINCTCOUNT(dim_student[student_key]),
+			        dim_achievement_type[category] = "Leadership Award"
+			    ),
+			    DISTINCTCOUNT(dim_student[student_key])
+			) * 100
+		lineageTag: e4e6c823-6933-440f-84cd-80dee5727f1b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Revenue YTD' =
+			
+			TOTALYTD(
+			    SUM(fact_payments[amount_paid]),
+			    dim_date[full_date]
+			)
+		formatString: 0
+		lineageTag: 1cff2ae2-6806-4f3c-ad96-dab23fe45b02
+
+	measure 'Potential Revenue' =
+			
+			SUM(fact_payments[net_amount]
+			)
+		formatString: 0
+		lineageTag: 351939db-31ba-4472-9933-3542b45576c5
+
+	measure 'Revenue Realized' =
+			
+			SUM(fact_payments[amount_paid])
+		formatString: 0
+		lineageTag: c29eeea2-fda7-4ce3-9ce3-a2fdfbfb98b9
+
+	measure 'Revenue Overdue' =
+			
+			[Potential Revenue] - [Revenue Realized]
+		formatString: 0
+		lineageTag: c4dab8a7-e433-45d2-85aa-8be9d33092f0
+
+	measure 'Revenue Growth %' =
+			
+			DIVIDE(
+			    [Revenue YTD] - [Revenue PYTD],
+			    [Revenue PYTD]
+			) * 100
+		lineageTag: fd8f1be4-84bd-4523-8ca6-5f3806a36d52
+
+	measure 'Revenue PYTD' =
+			
+			CALCULATE(
+			    [Revenue YTD],
+			    SAMEPERIODLASTYEAR(dim_date[full_date])
+			)
+		formatString: 0
+		lineageTag: 8e1cfba5-d9ca-4506-804b-647de9cc323e
+
+	measure '% Revenue by Religion' =
+			
+			DIVIDE(
+			    SUM(fact_payments[amount_paid]),
+			    CALCULATE(
+			        SUM(fact_payments[amount_paid]),
+			        ALL(dim_religion[religion_id])
+			    )
+			) * 100
+		lineageTag: 4308e352-6ab3-49b9-b01a-6f72adaf88b9
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '% Revenue by socioeconomics status' =
+			
+			DIVIDE(
+			    SUM(fact_payments[amount_paid]),
+			    CALCULATE(
+			        SUM(fact_payments[amount_paid]),
+			        ALL(dim_socioeconomic_status[StatusName])
+			    )
+			) * 100
+		lineageTag: acba1d89-2906-4281-9aab-ea18097079ca
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Revenue by race' =
+			
+			SUM(fact_payments[amount_paid])
+		formatString: 0
+		lineageTag: 90a6e81d-5bfc-413c-b756-70ae589eeb66
+
+	measure 'Revenue by Grade' =
+			
+			VAR EnrolledStudents = VALUES(fact_enrollment[student_key])
+			RETURN
+			CALCULATE(
+			    [Total Revenue],
+			    TREATAS(EnrolledStudents, fact_payments[student_key])
+			)
+		lineageTag: 0affcd22-c0f9-47aa-ac9c-c1d1dd201277
+
+	measure 'Total Revenue' = SUM(fact_payments[amount_paid])
+		formatString: 0
+		lineageTag: c4f9a65f-d03b-46cf-a4f1-a155c1115690
+
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: 0809c0e2-99b4-4eb2-a81d-5084134722a0
+		summarizeBy: none
+		sourceColumn: id
+
+		annotation SummarizationSetBy = User
+
+	column date_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 282e6496-f036-443f-9fd5-00acb518b243
+		summarizeBy: none
+		sourceColumn: date_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column student_key
+		dataType: int64
+		formatString: 0
+		lineageTag: fe9efd02-b03e-4e74-80a9-6b9556ff5d9e
+		summarizeBy: none
+		sourceColumn: student_key
+
+		annotation SummarizationSetBy = User
+
+	column term_key
+		dataType: int64
+		formatString: 0
+		lineageTag: db91bdda-ed68-4fcc-9f24-dbfb51c13703
+		summarizeBy: none
+		sourceColumn: term_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column school_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 432f3f3c-4e77-48e5-a2f5-0a5f399ee1d2
+		summarizeBy: none
+		sourceColumn: school_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_type_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 1817e779-c9ff-4435-ac3e-b8819eb5da12
+		summarizeBy: none
+		sourceColumn: payment_type_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column academic_year
+		dataType: string
+		lineageTag: 20df8240-e774-4897-8e79-b3e105b59125
+		summarizeBy: none
+		sourceColumn: academic_year
+
+		annotation SummarizationSetBy = Automatic
+
+	column amount_paid
+		dataType: int64
+		formatString: 0
+		lineageTag: 509a3c4b-487b-4a4b-a8f2-846fdae0c630
+		summarizeBy: sum
+		sourceColumn: amount_paid
+
+		annotation SummarizationSetBy = Automatic
+
+	column net_amount
+		dataType: int64
+		formatString: 0
+		lineageTag: 9e540ccb-774e-47ef-b1c7-85f088a6e081
+		summarizeBy: sum
+		sourceColumn: net_amount
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_by
+		dataType: string
+		lineageTag: c0954037-aaf1-4cbe-8d0d-e275c8f913d4
+		summarizeBy: none
+		sourceColumn: created_by
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 42121abe-fac2-4f3d-a504-0a8f1888aff4
+		summarizeBy: none
+		sourceColumn: created_at
+
+		variation Variation
+			isDefault
+			relationship: ac2c6f49-3889-4bee-bdfc-622c8bb7d757
+			defaultHierarchy: LocalDateTable_4cb4b937-839a-45da-83c9-59103b66119a.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_by
+		dataType: string
+		lineageTag: 393d4180-63a4-4fb3-b269-27cd842829d0
+		summarizeBy: none
+		sourceColumn: updated_by
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: fabd652b-cbcd-478c-9581-b2fb81457bb1
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		variation Variation
+			isDefault
+			relationship: fb16b377-b82f-4997-9baf-27baae883822
+			defaultHierarchy: LocalDateTable_3cb85f64-ddae-47d1-bff4-5ed6276d6248.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_payments = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("10.10.10.73", "school_db_olap_final"),
+				    dbo_v_fact_payments = Source{[Schema="dbo",Item="v_fact_payments"]}[Data],
+				    #"Reordered Columns" = Table.ReorderColumns(dbo_v_fact_payments,{"id", "date_key", "student_key", "term_key", "school_key", "payment_type_key", "academic_year", "amount_paid", "net_amount", "created_by", "created_at", "updated_by", "updated_at"})
+				in
+				    #"Reordered Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

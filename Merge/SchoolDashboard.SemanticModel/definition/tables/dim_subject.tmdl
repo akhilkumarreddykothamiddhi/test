@@ -1,0 +1,88 @@
+table dim_subject
+	lineageTag: b9dd3f2f-1437-4a7b-ad12-88cddeb4a5c5
+
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: 55fab984-f0c7-43c1-9195-532815241c0e
+		summarizeBy: none
+		sourceColumn: id
+
+		annotation SummarizationSetBy = User
+
+	column subject_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 3588eb2a-7a50-4e03-b9d8-4e1f855129c3
+		summarizeBy: none
+		sourceColumn: subject_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column subject_name
+		dataType: string
+		lineageTag: c028b8b1-36e8-4fa0-b0ba-df0a284deba5
+		summarizeBy: none
+		sourceColumn: subject_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_by
+		dataType: string
+		lineageTag: d8c4b058-d1c7-4bec-9c4f-83c078d72b06
+		summarizeBy: none
+		sourceColumn: created_by
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 07feb850-1156-47a5-9f8b-36bb61b4247d
+		summarizeBy: none
+		sourceColumn: created_at
+
+		variation Variation
+			isDefault
+			relationship: 96fd5673-a405-4960-acbc-46bf6a1656d8
+			defaultHierarchy: LocalDateTable_433109d5-6290-45d3-b8e5-ebd90bd9274d.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_by
+		dataType: string
+		lineageTag: 4d6364f2-c0e9-41df-b21a-d0fa4fae94d0
+		summarizeBy: none
+		sourceColumn: updated_by
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 8b21913c-f0c3-45f9-89d9-18fa4b85ad81
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		variation Variation
+			isDefault
+			relationship: ab2677f3-be94-4a5e-908e-5c0d60c85fb2
+			defaultHierarchy: LocalDateTable_e0ec8024-41bd-4d4e-84c9-3911308dcf9a.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_subject = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("10.10.10.73", "school_db_olap_final"),
+				    dbo_v_dim_subject = Source{[Schema="dbo",Item="v_dim_subject"]}[Data],
+				    #"Renamed Columns" = Table.RenameColumns(dbo_v_dim_subject,{{"subject_key", "subject_id"}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Renamed Columns",{"department"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

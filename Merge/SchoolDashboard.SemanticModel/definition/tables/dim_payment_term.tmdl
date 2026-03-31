@@ -1,0 +1,98 @@
+table dim_payment_term
+	lineageTag: d46d47f2-0a12-46d5-81be-1220ae5fcb52
+
+	column key
+		dataType: int64
+		formatString: 0
+		lineageTag: 1807c0a9-cdd3-4143-8a51-2c7da9de57f0
+		summarizeBy: none
+		sourceColumn: key
+
+		annotation SummarizationSetBy = User
+
+	column term_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 21696c47-be6b-420a-a323-2ff2e8ddc13f
+		summarizeBy: none
+		sourceColumn: term_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column term_name
+		dataType: string
+		lineageTag: 6ee736b1-a712-4da2-a860-23122e0e14b1
+		summarizeBy: none
+		sourceColumn: term_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column term_order
+		dataType: int64
+		formatString: 0
+		lineageTag: 202fea7f-efba-4a24-9df5-d0d9683d3ba9
+		summarizeBy: none
+		sourceColumn: term_order
+
+		annotation SummarizationSetBy = User
+
+	column academic_year
+		dataType: string
+		lineageTag: 9e15fcf9-56f2-4f5c-b7b4-e6d79f449a5b
+		summarizeBy: none
+		sourceColumn: academic_year
+
+		annotation SummarizationSetBy = Automatic
+
+	column row_inserted_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 6f00b3c3-593f-4e57-bf80-3bc736a1f507
+		summarizeBy: none
+		sourceColumn: row_inserted_at
+
+		variation Variation
+			isDefault
+			relationship: 7066d016-9de6-42fc-8f08-55e9ec749933
+			defaultHierarchy: LocalDateTable_95fa2bbd-70fe-4499-bb54-f8adb92c2efb.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_by
+		dataType: string
+		lineageTag: 0858f23f-38ee-4607-a82d-12b505448268
+		summarizeBy: none
+		sourceColumn: created_by
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: ee3db867-4941-4390-b735-e692ed93da43
+		summarizeBy: none
+		sourceColumn: created_at
+
+		variation Variation
+			isDefault
+			relationship: d8d54720-ab48-4e43-aa52-074508cad231
+			defaultHierarchy: LocalDateTable_5066780f-d32d-409e-a6a0-358063697798.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_payment_term = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("10.10.10.73", "school_db_olap_final"),
+				    dbo_dim_payment_term = Source{[Schema="dbo",Item="dim_payment_term"]}[Data],
+				    #"Renamed Columns" = Table.RenameColumns(dbo_dim_payment_term,{{"term_key", "id"}, {"oltp_term_id", "term_key"}}),
+				    #"Removed Columns1" = Table.RemoveColumns(#"Renamed Columns",{"fact_payments"}),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Removed Columns1",{{"term_key", "term_key"}, {"id", "key"}})
+				in
+				    #"Renamed Columns1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

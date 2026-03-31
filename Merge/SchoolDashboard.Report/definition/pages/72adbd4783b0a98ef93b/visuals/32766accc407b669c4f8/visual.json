@@ -1,0 +1,316 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.7.0/schema.json",
+  "name": "32766accc407b669c4f8",
+  "position": {
+    "x": 664.75989136974943,
+    "y": 155.86554567186508,
+    "z": 11000,
+    "height": 516.88745060413373,
+    "width": 601.48114419527428,
+    "tabOrder": 11000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_achievement"
+                    }
+                  },
+                  "Property": "student_key"
+                }
+              },
+              "queryRef": "fact_achievement.student_key",
+              "nativeQueryRef": "Id",
+              "displayName": "Id"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_student"
+                    }
+                  },
+                  "Property": "full name"
+                }
+              },
+              "queryRef": "dim_student.full name",
+              "nativeQueryRef": "Full Name",
+              "displayName": "Full Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_student"
+                    }
+                  },
+                  "Property": "gender"
+                }
+              },
+              "queryRef": "dim_student.gender",
+              "nativeQueryRef": "Gender",
+              "displayName": "Gender"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_religion"
+                    }
+                  },
+                  "Property": "religion_name"
+                }
+              },
+              "queryRef": "dim_religion.religion_name",
+              "nativeQueryRef": "Religion Name",
+              "displayName": "Religion Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_achievement_type"
+                    }
+                  },
+                  "Property": "category"
+                }
+              },
+              "queryRef": "dim_achievement_type.category",
+              "nativeQueryRef": "Category",
+              "displayName": "Category"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_achievement_type"
+                    }
+                  },
+                  "Property": "achievement_name"
+                }
+              },
+              "queryRef": "dim_achievement_type.achievement_name",
+              "nativeQueryRef": "Achievement Name",
+              "displayName": "Achievement Name"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "dim_student"
+                  }
+                },
+                "Property": "full name"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Arial'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 0,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            },
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#42617F'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "43.09190718488876D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fact_achievement.student_key"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "75.54027246166953D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dim_achievement_type.category"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "103.63915465113708D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dim_student.full name"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "165.17292707301488D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dim_achievement_type.achievement_name"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "66.3117871335247D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dim_student.gender"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Top 5 Performers In Academics'"
+                }
+              }
+            },
+            "heading": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Normal'"
+                }
+              }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Arial'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 0,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

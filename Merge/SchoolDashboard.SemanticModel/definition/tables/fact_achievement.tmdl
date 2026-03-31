@@ -1,0 +1,318 @@
+table fact_achievement
+	lineageTag: f4e25b64-c8a6-41a2-894e-1911536cb6d0
+
+	measure 'Sports Adoption Rate Gender' = ```
+			
+			VAR StudentsInSports = 
+			    CALCULATE(
+			        DISTINCTCOUNT(fact_achievement[student_key]), 
+			        dim_achievement_type[category] = "Sports Medal"
+			    )
+			VAR TotalStudents = DISTINCTCOUNT(dim_student[id])
+			RETURN
+			DIVIDE(StudentsInSports, TotalStudents, 0)
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 18508444-68dc-44a8-bdf4-11aa86f49864
+
+	measure 'Sports Adoption Rate %' = ```
+			
+			VAR StudentsWithSports = 
+			    CALCULATE(
+			        DISTINCTCOUNT(fact_achievement[student_key]), 
+			        dim_achievement_type[category] = "Sports medal"
+			    )
+			VAR TotalStudents = 
+			    DISTINCTCOUNT(dim_student[id])
+			
+			RETURN
+			    DIVIDE(StudentsWithSports, TotalStudents, 0) * 100
+			```
+		lineageTag: f3bdd23f-2dcc-4e3c-9c1f-089d8941a157
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Sports Adoption Rate by Race' = ```
+			
+			VAR TotalStudentsByRace = 
+			    CALCULATE(
+			        DISTINCTCOUNT(fact_enrollment[student_key])
+			    )
+			
+			VAR SportsStudentsByRace = 
+			    CALCULATE(
+			        DISTINCTCOUNT(fact_achievement[student_key]),
+			        KEEPFILTERS(dim_achievement_type[category] = "Sports Medal")
+			    )
+			
+			RETURN 
+			    DIVIDE(SportsStudentsByRace, TotalStudentsByRace, 0)
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 12e06234-b8c9-4c61-b9e4-b63a0e9e4e59
+
+	measure 'Extra Curricular Activities Growth %' =
+			
+			DIVIDE(
+			    [Extra Curricular Activities YTD] - [Extra Curricular Activities PYTD],
+			    [Extra Curricular Activities PYTD]
+			) * 100
+		lineageTag: 26f92414-6743-497c-86d7-32c0a0baf8e5
+
+	measure 'Extra Curricular Activities PYTD' =
+			
+			CALCULATE(
+			    [Extra Curricular Activities YTD],
+			    SAMEPERIODLASTYEAR(dim_date[full_date])
+			)
+		lineageTag: 0906a1a2-1668-4e79-978a-e5d7e5661e08
+
+	measure 'Extra Curricular Activities YTD' =
+			
+			TOTALYTD(
+			    SUM(dim_achievement_type[category]),
+			    dim_date[full_date]
+			)
+		formatString: 0
+		lineageTag: 094c28c8-77ab-436b-91c4-2276943713ff
+
+	measure 'Sports Adoption Rate Socioeconomic' =
+			
+			DIVIDE(
+			    CALCULATE(
+			        COUNTROWS(dim_student),
+			        dim_achievement_type[category] = "sports medal "
+			    ),
+			    COUNTROWS(dim_student)
+			) * 100
+		lineageTag: bcdd662d-1d4e-422b-b8b1-cf6b9c3e6e64
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '% Sports Intake' =
+			
+			DIVIDE(
+			    CALCULATE(
+			        DISTINCTCOUNT(dim_student[student_key]),
+			        dim_achievement_type[category] = "Sports Medal"
+			    ),
+			    DISTINCTCOUNT(dim_student[student_key])
+			) * 100
+		lineageTag: b0267768-6293-4db5-ab51-7343f58952aa
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Sports Intake' =
+			
+			CALCULATE(
+			    DISTINCTCOUNT(fact_achievement[student_key]),
+			    dim_achievement_type[category] = "Sports medal"
+			)
+		formatString: 0
+		lineageTag: 55dfe97a-0e22-456c-aa9e-168303f17ba7
+
+	measure 'NCC Adoption Rate by SES %' =
+			
+			DIVIDE(
+			    CALCULATE(
+			        DISTINCTCOUNT(dim_student[student_id]),
+			        dim_achievement_type[category] = "Leadership Award"
+			    ),
+			    CALCULATE(
+			        DISTINCTCOUNT(dim_student[student_id]),
+			        ALLEXCEPT(dim_student, dim_socioeconomic_status[StatusName])
+			    )
+			) * 100
+		lineageTag: aaaea4d6-b9bb-43a2-a91a-6d667773c4bc
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'NCC Adoption Rate by Gender %' =
+			
+			DIVIDE(
+			    CALCULATE(
+			        DISTINCTCOUNT(dim_student[student_key]),
+			        dim_achievement_type[category] ="Leadership Award"
+			    ),
+			    CALCULATE(
+			        DISTINCTCOUNT(dim_student[student_key]),
+			        ALLEXCEPT(dim_student, dim_student[gender])
+			    )
+			) * 100
+		lineageTag: bdc86882-773b-400b-877d-ed76296b9460
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'NCC Adoption Rate %' =
+			
+			DIVIDE(
+			    CALCULATE(
+			        DISTINCTCOUNT(dim_student[student_key]),
+			        dim_achievement_type[category] = "leadership award"
+			    ),
+			    DISTINCTCOUNT(dim_student[student_key])
+			) * 100
+		lineageTag: efe38b17-80cc-4666-8f28-87b5f0db612e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Avg SAT ACT Score' =
+			
+			AVERAGEX(
+			    dim_achievement_type,
+			    COALESCE(dim_achievement_type[achievement_key], dim_achievement_type[achievement_key])
+			)
+		lineageTag: 401df9e7-fd5b-459a-a257-c7e061003e0f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'NCC Intake Count' =
+			
+			CALCULATE(
+			    DISTINCTCOUNT(fact_achievement[student_key]),
+			    KEEPFILTERS(dim_achievement_type[category] = "leadership award"),
+			    CROSSFILTER(fact_enrollment[student_key], dim_student[id], Both)
+			)
+		formatString: 0
+		lineageTag: 55f40a0b-7fa8-495f-9c48-b153693dd61e
+
+	measure 'Selected Rate by Gender' =
+			
+			VAR PassThreshold = 0.50
+			VAR SelectedType = SELECTEDVALUE('Rate Type'[Type], "Pass Rate")
+			
+			RETURN
+			SWITCH(
+			    SelectedType,
+			
+			    "Pass Rate",
+			        CALCULATE(
+			            COUNTROWS(fact_assessment),
+			            FILTER(
+			                fact_assessment,
+			                VAR MaxMarks = COALESCE(RELATED(dim_assessment[max_marks]), 0)
+			                VAR Marks = COALESCE(fact_assessment[marks_obtained], 0)
+			                RETURN
+			                    MaxMarks > 0 &&
+			                    DIVIDE(Marks, MaxMarks, 0) >= PassThreshold
+			            )
+			        ),
+			
+			    "Fail Rate",
+			        CALCULATE(
+			            COUNTROWS(fact_assessment),
+			            FILTER(
+			                fact_assessment,
+			                VAR MaxMarks = COALESCE(RELATED(dim_assessment[max_marks]), 0)
+			                VAR Marks = COALESCE(fact_assessment[marks_obtained], 0)
+			                RETURN
+			                    MaxMarks > 0 &&
+			                    DIVIDE(Marks, MaxMarks, 0) < PassThreshold
+			            )
+			        )
+			)
+		lineageTag: 0d6dfcb2-1af8-4afc-bfd5-6988fb0657c6
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: b304d9d9-18ea-45c8-b3c0-5c0591526438
+		summarizeBy: none
+		sourceColumn: id
+
+		annotation SummarizationSetBy = User
+
+	column date_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 5ef09391-2220-4556-811e-ace498eaf5f4
+		summarizeBy: none
+		sourceColumn: date_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column achievement_type_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 450bbdaf-bbf0-4c8f-a268-550d4e090b5f
+		summarizeBy: none
+		sourceColumn: achievement_type_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column student_key
+		dataType: int64
+		formatString: 0
+		lineageTag: bab08c1e-26bf-4d36-b87f-40287321dbcd
+		summarizeBy: none
+		sourceColumn: student_key
+
+		annotation SummarizationSetBy = User
+
+	column school_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 9b104196-f594-46aa-96bd-7ab084b6e74f
+		summarizeBy: none
+		sourceColumn: school_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column race_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 52d6b001-bc40-4f34-b7f4-cd04a03c7da5
+		summarizeBy: none
+		sourceColumn: race_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column religion_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 80349494-0ab7-4349-8e2b-e6bc1c62da38
+		summarizeBy: none
+		sourceColumn: religion_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column socioeconomic_status_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 8ff6a23b-7101-43cf-8fe7-b2f0ca3e2928
+		summarizeBy: none
+		sourceColumn: socioeconomic_status_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: bf6ba621-84da-4f1b-be15-698c41499dea
+		summarizeBy: none
+		sourceColumn: created_at
+
+		variation Variation
+			isDefault
+			relationship: 1aa867ad-0f58-4274-8a9d-4ccec76b29d8
+			defaultHierarchy: LocalDateTable_0338a91a-0e09-4488-890e-eb9ffe6919cb.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_achievement = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("10.10.10.73", "school_db_olap_final"),
+				    dbo_v_fact_achievement = Source{[Schema="dbo",Item="v_fact_achievement"]}[Data],
+				    #"Reordered Columns" = Table.ReorderColumns(dbo_v_fact_achievement,{"id", "date_key", "achievement_type_key", "student_key", "school_key", "race_id", "religion_id", "socioeconomic_status_id", "created_at"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Reordered Columns",{{"race_id", "race_key"}, {"religion_id", "religion_key"}, {"socioeconomic_status_id", "socioeconomic_status_key"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

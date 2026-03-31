@@ -1,0 +1,75 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["dim_achievement_type","dim_assessment","dim_assessment_type","dim_attendance_status","dim_date","dim_grade","dim_payment_term","dim_payment_type","dim_race","dim_religion","dim_school","dim_socioeconomic_status","dim_staff","dim_student","dim_subject","fact_achievement","fact_assessment","fact_attendance","fact_enrollment","fact_payments","fact_teaching_assignment","Query1","Query2"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table dim_achievement_type
+ref table dim_assessment
+ref table DateTableTemplate_8de0002a-da98-4e93-944c-81de30f9a836
+ref table LocalDateTable_66ddfd17-3d64-4e69-80a4-9b07dd24fad5
+ref table dim_assessment_type
+ref table LocalDateTable_b4f37ddd-ff07-43a2-be0b-53aa0020b537
+ref table dim_attendance_status
+ref table LocalDateTable_91d086b3-16d1-473d-98cb-d0af2a50e373
+ref table LocalDateTable_dfe4d883-4e01-4c46-8338-34390425b63f
+ref table dim_date
+ref table LocalDateTable_f019ac5d-fa93-4d34-9b0e-574f5d662b0f
+ref table LocalDateTable_a8b350da-2198-4321-aea1-118343eeb9f8
+ref table LocalDateTable_d0ded880-1ec2-4a1a-b13a-7353c52e214f
+ref table dim_grade
+ref table dim_payment_term
+ref table LocalDateTable_95fa2bbd-70fe-4499-bb54-f8adb92c2efb
+ref table LocalDateTable_5066780f-d32d-409e-a6a0-358063697798
+ref table dim_payment_type
+ref table LocalDateTable_fabe3f67-2b5c-4f36-8467-7c80383e67ac
+ref table LocalDateTable_f2c57f20-33d6-4d73-8ce2-6bd28efbd127
+ref table dim_race
+ref table LocalDateTable_d1f89d01-d78d-4532-b762-e4b4965dcbfa
+ref table dim_religion
+ref table LocalDateTable_38447453-c4fa-45d2-9417-4c1a550c9353
+ref table dim_school
+ref table LocalDateTable_e44a6932-53cb-463d-9001-645379528db1
+ref table LocalDateTable_93f48c39-09da-4ac3-bfb1-1fc55fc219d3
+ref table dim_socioeconomic_status
+ref table LocalDateTable_9ffe6597-14a0-4ff5-901f-30de494c9a29
+ref table LocalDateTable_33eb9d54-abde-403a-9b1d-956bf004a5fa
+ref table dim_staff
+ref table LocalDateTable_112e6da4-9aaa-4043-8981-80951acdddd3
+ref table dim_student
+ref table LocalDateTable_f881a505-962d-4b16-824d-2ed138255eb7
+ref table LocalDateTable_2fb7541b-84ec-47ad-b83a-ad98a69276fc
+ref table LocalDateTable_fa63ddd4-b0d5-400e-9f30-7a876083b937
+ref table LocalDateTable_d2e18bfd-5747-4569-afc2-d8c5c6e5855a
+ref table dim_subject
+ref table LocalDateTable_433109d5-6290-45d3-b8e5-ebd90bd9274d
+ref table LocalDateTable_e0ec8024-41bd-4d4e-84c9-3911308dcf9a
+ref table fact_achievement
+ref table LocalDateTable_0338a91a-0e09-4488-890e-eb9ffe6919cb
+ref table fact_assessment
+ref table LocalDateTable_a5ef12b6-ee5d-451e-b601-3aa01ded8743
+ref table fact_attendance
+ref table LocalDateTable_a6023dfd-8952-4250-afa1-d4dd959125c7
+ref table fact_enrollment
+ref table LocalDateTable_d470a59f-e362-4393-961b-3ddceb822fe0
+ref table LocalDateTable_edc21ae7-4027-4dff-b806-9a38fb5c7066
+ref table fact_payments
+ref table LocalDateTable_4cb4b937-839a-45da-83c9-59103b66119a
+ref table LocalDateTable_3cb85f64-ddae-47d1-bff4-5ed6276d6248
+ref table fact_teaching_assignment
+ref table LocalDateTable_7708c12c-0712-4e2f-8068-c44a94a7816a
+ref table Query1
+ref table LocalDateTable_f6f44aed-f47a-425d-a4be-4f8b292fdcbd
+ref table Query2
+ref table 'Rate Type'
+
+ref cultureInfo en-US
+

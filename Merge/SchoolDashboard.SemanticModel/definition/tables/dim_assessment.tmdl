@@ -1,0 +1,84 @@
+table dim_assessment
+	lineageTag: f1b9efb8-729c-4544-889e-201711ba5cd8
+
+	column key
+		dataType: int64
+		formatString: 0
+		lineageTag: 68a9f444-e127-4c8f-974c-d05648a6bd38
+		summarizeBy: none
+		sourceColumn: key
+
+		annotation SummarizationSetBy = User
+
+	column assessment_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 148b0807-c41f-4d39-a0dd-9f2d8b17e80f
+		summarizeBy: none
+		sourceColumn: assessment_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column title
+		dataType: string
+		lineageTag: 75bb2eef-059b-43aa-a7a2-5dd92a35071f
+		summarizeBy: none
+		sourceColumn: title
+
+		annotation SummarizationSetBy = Automatic
+
+	column max_marks
+		dataType: double
+		lineageTag: 08b08e3a-88d7-4d2f-be49-457609300fab
+		summarizeBy: sum
+		sourceColumn: max_marks
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column academic_year
+		dataType: string
+		lineageTag: 00051bb6-9b56-4def-98b4-7793a1c7e22d
+		summarizeBy: none
+		sourceColumn: academic_year
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 7c015383-31b2-48f9-a519-2d6cb8a16035
+		summarizeBy: none
+		sourceColumn: created_at
+
+		variation Variation
+			isDefault
+			relationship: 7ea2ba7f-6f3c-4de9-9a83-3113905701f5
+			defaultHierarchy: LocalDateTable_66ddfd17-3d64-4e69-80a4-9b07dd24fad5.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_by
+		dataType: string
+		lineageTag: 2713c48e-e47a-4f9a-810e-1debddf85e26
+		summarizeBy: none
+		sourceColumn: created_by
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_assessment = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("10.10.10.73", "school_db_olap_final"),
+				     dbo_v_dim_assessment = Source{[Schema="dbo",Item="v_dim_assessment"]}[Data],
+				    #"Sorted Rows" = Table.Sort(dbo_v_dim_assessment,{{"id", Order.Ascending}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Sorted Rows",{{"assessment_key", "assessment_key"}, {"id", "key"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

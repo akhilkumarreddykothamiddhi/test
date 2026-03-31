@@ -1,0 +1,127 @@
+table dim_school
+	lineageTag: 04617521-8f9a-4c90-b8a7-38f1ab7e9adc
+
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: 407b04ba-dd25-4d08-9701-861436efec85
+		summarizeBy: none
+		sourceColumn: id
+
+		annotation SummarizationSetBy = User
+
+	column school_id
+		dataType: int64
+		formatString: 0
+		lineageTag: dd96b5e7-6871-4458-893d-33dff476a042
+		summarizeBy: none
+		sourceColumn: school_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column school_code
+		dataType: string
+		lineageTag: d569187c-b901-4062-98e5-5cfa090800c4
+		summarizeBy: none
+		sourceColumn: school_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column school_name
+		dataType: string
+		lineageTag: f6c59595-0462-4ac4-a6e5-89e7105a39ad
+		summarizeBy: none
+		sourceColumn: school_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column country
+		dataType: string
+		lineageTag: 73508d6a-c31b-4505-8f4d-b6183c976c16
+		summarizeBy: none
+		sourceColumn: country
+
+		annotation SummarizationSetBy = Automatic
+
+	column state
+		dataType: string
+		lineageTag: 952e99cc-abdf-4f39-99f5-28e6920df2f9
+		summarizeBy: none
+		sourceColumn: state
+
+		annotation SummarizationSetBy = Automatic
+
+	column city
+		dataType: string
+		lineageTag: 7365a5e1-a380-457c-86e6-bba5b5ac0999
+		summarizeBy: none
+		sourceColumn: city
+
+		annotation SummarizationSetBy = Automatic
+
+	column branch
+		dataType: string
+		lineageTag: 557fcd9f-dd46-451f-bb09-78afb6ee4946
+		summarizeBy: none
+		sourceColumn: branch
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_by
+		dataType: string
+		lineageTag: 80ca05c2-0ece-44d8-a908-df54ece63ef6
+		summarizeBy: none
+		sourceColumn: created_by
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 43b118ea-0d6e-45a4-8530-075d8ec52c7a
+		summarizeBy: none
+		sourceColumn: created_at
+
+		variation Variation
+			isDefault
+			relationship: 6536ab2e-ab09-4e47-bfeb-3b9eecd2fd9b
+			defaultHierarchy: LocalDateTable_e44a6932-53cb-463d-9001-645379528db1.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_by
+		dataType: string
+		lineageTag: 7c546ef6-9711-4962-b087-c136624c03b0
+		summarizeBy: none
+		sourceColumn: updated_by
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 2b9fff2f-533d-4514-a9d7-107ee254ab5c
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		variation Variation
+			isDefault
+			relationship: 092b89a4-aca1-465b-87d2-817a3b89e99a
+			defaultHierarchy: LocalDateTable_93f48c39-09da-4ac3-bfb1-1fc55fc219d3.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_school = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("10.10.10.73", "school_db_olap_final"),
+				    dbo_v_dim_school = Source{[Schema="dbo",Item="v_dim_school"]}[Data],
+				    #"Renamed Columns" = Table.RenameColumns(dbo_v_dim_school,{{"school_key", "school_id"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

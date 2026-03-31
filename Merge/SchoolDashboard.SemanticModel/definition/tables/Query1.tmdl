@@ -1,0 +1,76 @@
+table Query1
+	lineageTag: 537a10f8-9270-4bfc-a386-7e007345d3a2
+
+	column school_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 2d5845cf-9fe3-41fd-a876-a072d9941313
+		summarizeBy: none
+		sourceColumn: school_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month_Starting
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: a7f26919-8161-4cbb-9cfc-938068a9384b
+		summarizeBy: none
+		sourceColumn: Month_Starting
+
+		variation Variation
+			isDefault
+			relationship: 7c7feb05-ef26-4463-8ccf-9e99d9711ae5
+			defaultHierarchy: LocalDateTable_f6f44aed-f47a-425d-a4be-4f8b292fdcbd.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column Monthly_Attendance_Percent
+		dataType: double
+		lineageTag: 9f4de182-9b38-4d16-8441-af3eed1be203
+		summarizeBy: sum
+		sourceColumn: Monthly_Attendance_Percent
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Month_Name
+		dataType: string
+		lineageTag: 5cdc4841-fd6e-46f9-8aca-55b3a97d1715
+		summarizeBy: none
+		sourceColumn: Month_Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column academic_year
+		dataType: string
+		lineageTag: 49946f1f-18a8-423f-a9fd-de8eb8d85821
+		summarizeBy: none
+		sourceColumn: academic_year
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Query1 = m
+		mode: import
+		source = ```
+				let
+				    Source = Sql.Database("10.10.10.73", "school_db_olap_final", [Query="SELECT 
+				    fa.school_key, -- Add this!
+				    DATEFROMPARTS(LEFT(fa.date_key, 4), SUBSTRING(CAST(fa.date_key AS VARCHAR), 5, 2), 1) AS Month_Starting,
+				    (SUM(CAST(fa.days_present AS FLOAT)) / NULLIF(SUM(CAST(fa.total_days AS FLOAT)), 0)) * 100.0 AS Monthly_Attendance_Percent,
+				    DATENAME(MONTH, DATEFROMPARTS(LEFT(fa.date_key, 4), SUBSTRING(CAST(fa.date_key AS VARCHAR), 5, 2), 1)) AS Month_Name,
+				    fa.academic_year
+				FROM fact_attendance fa WITH (NOLOCK)
+				GROUP BY 
+				    fa.school_key, -- And this!
+				    DATEFROMPARTS(LEFT(fa.date_key, 4), SUBSTRING(CAST(fa.date_key AS VARCHAR), 5, 2), 1),
+				    fa.academic_year
+				ORDER BY Month_Starting ASC;"])
+				in
+				    Source
+				```
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

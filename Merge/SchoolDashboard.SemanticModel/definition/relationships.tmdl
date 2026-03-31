@@ -1,0 +1,328 @@
+relationship 7ea2ba7f-6f3c-4de9-9a83-3113905701f5
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_assessment.created_at
+	toColumn: LocalDateTable_66ddfd17-3d64-4e69-80a4-9b07dd24fad5.Date
+
+relationship d25640a6-962d-4964-b046-7be8811da74f
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_assessment_type.created_at
+	toColumn: LocalDateTable_b4f37ddd-ff07-43a2-be0b-53aa0020b537.Date
+
+relationship eabdb896-2a23-4ffe-bba7-d480ef2bdf7b
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_attendance_status.created_at
+	toColumn: LocalDateTable_91d086b3-16d1-473d-98cb-d0af2a50e373.Date
+
+relationship a63358c4-7b3a-4340-8c14-7e0c97706c14
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_attendance_status.updated_at
+	toColumn: LocalDateTable_dfe4d883-4e01-4c46-8338-34390425b63f.Date
+
+relationship 2e90c043-0c1d-4b87-a8ba-c2a91394e1ee
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_date.full_date
+	toColumn: LocalDateTable_f019ac5d-fa93-4d34-9b0e-574f5d662b0f.Date
+
+relationship 1e4a120e-92dc-40cf-b019-1af873b07056
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_date.created_at
+	toColumn: LocalDateTable_a8b350da-2198-4321-aea1-118343eeb9f8.Date
+
+relationship 913e478f-7eae-4976-9c98-812b90a1c1a4
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_date.updated_at
+	toColumn: LocalDateTable_d0ded880-1ec2-4a1a-b13a-7353c52e214f.Date
+
+relationship 7066d016-9de6-42fc-8f08-55e9ec749933
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_payment_term.row_inserted_at
+	toColumn: LocalDateTable_95fa2bbd-70fe-4499-bb54-f8adb92c2efb.Date
+
+relationship d8d54720-ab48-4e43-aa52-074508cad231
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_payment_term.created_at
+	toColumn: LocalDateTable_5066780f-d32d-409e-a6a0-358063697798.Date
+
+relationship ed847e84-7be0-413c-a3b0-f8bdead17f3e
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_payment_type.created_at
+	toColumn: LocalDateTable_fabe3f67-2b5c-4f36-8467-7c80383e67ac.Date
+
+relationship 7c7a1fad-582a-4d61-822f-727e50847451
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_payment_type.updated_at
+	toColumn: LocalDateTable_f2c57f20-33d6-4d73-8ce2-6bd28efbd127.Date
+
+relationship 652190cf-87a4-4a6e-bac8-dda11d1f725e
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_race.created_at
+	toColumn: LocalDateTable_d1f89d01-d78d-4532-b762-e4b4965dcbfa.Date
+
+relationship f50447ed-fee8-4ce1-8351-717f867cde9a
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_religion.created_at
+	toColumn: LocalDateTable_38447453-c4fa-45d2-9417-4c1a550c9353.Date
+
+relationship 6536ab2e-ab09-4e47-bfeb-3b9eecd2fd9b
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_school.created_at
+	toColumn: LocalDateTable_e44a6932-53cb-463d-9001-645379528db1.Date
+
+relationship 092b89a4-aca1-465b-87d2-817a3b89e99a
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_school.updated_at
+	toColumn: LocalDateTable_93f48c39-09da-4ac3-bfb1-1fc55fc219d3.Date
+
+relationship 5ccaa074-1534-4e2f-92ee-5df561a06000
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_socioeconomic_status.CreatedAt
+	toColumn: LocalDateTable_9ffe6597-14a0-4ff5-901f-30de494c9a29.Date
+
+relationship cbee113b-0e29-4206-ab0d-cf7b45b78cbe
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_socioeconomic_status.UpdatedAt
+	toColumn: LocalDateTable_33eb9d54-abde-403a-9b1d-956bf004a5fa.Date
+
+relationship a4920fcf-4589-479a-ba44-59dbd99f22e2
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_staff.created_at
+	toColumn: LocalDateTable_112e6da4-9aaa-4043-8981-80951acdddd3.Date
+
+relationship b7832321-8aee-4cdf-9a1d-cb473e9426e5
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_student.date_of_birth
+	toColumn: LocalDateTable_f881a505-962d-4b16-824d-2ed138255eb7.Date
+
+relationship 1b60e5a3-729f-4a79-8e38-41acc0b32f6f
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_student.admission_date
+	toColumn: LocalDateTable_2fb7541b-84ec-47ad-b83a-ad98a69276fc.Date
+
+relationship 281684be-0940-4cb8-bab0-54bc7ea1507c
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_student.created_at
+	toColumn: LocalDateTable_fa63ddd4-b0d5-400e-9f30-7a876083b937.Date
+
+relationship 33a8a4db-f1b3-451b-8f6d-b1dd222a8602
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_student.updated_at
+	toColumn: LocalDateTable_d2e18bfd-5747-4569-afc2-d8c5c6e5855a.Date
+
+relationship 96fd5673-a405-4960-acbc-46bf6a1656d8
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_subject.created_at
+	toColumn: LocalDateTable_433109d5-6290-45d3-b8e5-ebd90bd9274d.Date
+
+relationship ab2677f3-be94-4a5e-908e-5c0d60c85fb2
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_subject.updated_at
+	toColumn: LocalDateTable_e0ec8024-41bd-4d4e-84c9-3911308dcf9a.Date
+
+relationship 1aa867ad-0f58-4274-8a9d-4ccec76b29d8
+	joinOnDateBehavior: datePartOnly
+	fromColumn: fact_achievement.created_at
+	toColumn: LocalDateTable_0338a91a-0e09-4488-890e-eb9ffe6919cb.Date
+
+relationship e4369450-ccc0-43e4-8a22-355d741883d9
+	joinOnDateBehavior: datePartOnly
+	fromColumn: fact_assessment.created_at
+	toColumn: LocalDateTable_a5ef12b6-ee5d-451e-b601-3aa01ded8743.Date
+
+relationship a90ae151-94f4-41b6-8ee8-28a7c4afc5e0
+	joinOnDateBehavior: datePartOnly
+	fromColumn: fact_attendance.created_at
+	toColumn: LocalDateTable_a6023dfd-8952-4250-afa1-d4dd959125c7.Date
+
+relationship 6844a503-9f1a-4c3e-9866-4246bfb1c33f
+	joinOnDateBehavior: datePartOnly
+	fromColumn: fact_enrollment.created_at
+	toColumn: LocalDateTable_d470a59f-e362-4393-961b-3ddceb822fe0.Date
+
+relationship 5e9b0b28-563f-4f33-95a2-db31108d1f9f
+	joinOnDateBehavior: datePartOnly
+	fromColumn: fact_enrollment.updated_at
+	toColumn: LocalDateTable_edc21ae7-4027-4dff-b806-9a38fb5c7066.Date
+
+relationship ac2c6f49-3889-4bee-bdfc-622c8bb7d757
+	joinOnDateBehavior: datePartOnly
+	fromColumn: fact_payments.created_at
+	toColumn: LocalDateTable_4cb4b937-839a-45da-83c9-59103b66119a.Date
+
+relationship fb16b377-b82f-4997-9baf-27baae883822
+	joinOnDateBehavior: datePartOnly
+	fromColumn: fact_payments.updated_at
+	toColumn: LocalDateTable_3cb85f64-ddae-47d1-bff4-5ed6276d6248.Date
+
+relationship 3f2a8be3-6c2f-4a64-a41c-d257f0026671
+	joinOnDateBehavior: datePartOnly
+	fromColumn: fact_teaching_assignment.created_at
+	toColumn: LocalDateTable_7708c12c-0712-4e2f-8068-c44a94a7816a.Date
+
+relationship AutoDetected_2c65a4b2-6ffb-4592-8f6a-9249ab67fbf7
+	fromColumn: fact_attendance.grade_key
+	toColumn: dim_grade.grade_key
+
+relationship AutoDetected_bf9207e0-e045-481a-a249-b8f55eed050a
+	fromColumn: fact_teaching_assignment.grade_key
+	toColumn: dim_grade.grade_key
+
+relationship AutoDetected_ce39f46f-ae26-43df-a015-0dbf657c1ae8
+	fromColumn: fact_assessment.assessment_key
+	toColumn: dim_assessment.assessment_key
+
+relationship AutoDetected_3741a2d1-e630-4a9f-b2a7-84e5b41412bf
+	fromColumn: fact_assessment.assessment_type_key
+	toColumn: dim_assessment_type.assessment_type_key
+
+relationship AutoDetected_b5b4c444-055b-4306-8af1-4800d7497aff
+	fromColumn: fact_payments.term_key
+	toColumn: dim_payment_term.term_key
+
+relationship AutoDetected_677c04b4-3e75-4331-8e3b-38c87ac8fdb7
+	fromColumn: fact_payments.payment_type_key
+	toColumn: dim_payment_type.payment_type_id
+
+relationship AutoDetected_e5de863e-19d3-45a2-a3fe-631000ed1aab
+	fromColumn: fact_achievement.race_key
+	toColumn: dim_race.race_id
+
+relationship AutoDetected_e38477ef-6708-40ae-89d7-33f31faa7c01
+	fromColumn: fact_enrollment.race_key
+	toColumn: dim_race.race_id
+
+relationship AutoDetected_7665ee11-48b2-4dba-831c-483f64c2ee05
+	fromColumn: fact_achievement.religion_key
+	toColumn: dim_religion.religion_id
+
+relationship AutoDetected_f5ae31f5-b316-412a-ae49-a7f10f9e369e
+	fromColumn: fact_enrollment.religion_key
+	toColumn: dim_religion.religion_id
+
+relationship AutoDetected_c6e9dc68-dbfb-474f-b642-b231e973303e
+	fromColumn: fact_achievement.school_key
+	toColumn: dim_school.school_id
+
+relationship AutoDetected_fb58ad7f-8db5-48de-8870-752761853239
+	fromColumn: fact_assessment.school_key
+	toColumn: dim_school.school_id
+
+relationship AutoDetected_42bb8a3d-836a-4391-b7e5-e7f7d43b3418
+	fromColumn: fact_enrollment.school_key
+	toColumn: dim_school.school_id
+
+relationship AutoDetected_071106d1-2213-4086-83f7-8be9bf744fef
+	fromColumn: fact_payments.school_key
+	toColumn: dim_school.school_id
+
+relationship AutoDetected_1d8be7bf-86c5-401e-b3c7-da589685d85f
+	fromColumn: fact_teaching_assignment.school_key
+	toColumn: dim_school.school_id
+
+relationship AutoDetected_915c3be3-8dee-4425-bd35-ddacffc88f2c
+	fromColumn: fact_teaching_assignment.staff_key
+	toColumn: dim_staff.staff_id
+
+relationship AutoDetected_af6411f0-c5b4-47eb-ad37-d87d64434fb4
+	fromColumn: fact_assessment.student_key
+	toColumn: dim_student.student_key
+
+relationship AutoDetected_79fe426e-f587-4070-86ef-8538127b9512
+	isActive: false
+	fromColumn: fact_payments.student_key
+	toColumn: dim_student.student_key
+
+relationship AutoDetected_9a2a7545-7cee-468a-a485-0ae86ddb32b3
+	isActive: false
+	fromColumn: fact_teaching_assignment.student_key
+	toColumn: dim_student.student_key
+
+relationship AutoDetected_8ec85102-3cf9-4784-a89d-8b1a2f0fb16d
+	fromColumn: fact_assessment.subject_key
+	toColumn: dim_subject.subject_id
+
+relationship AutoDetected_a6c1bcb7-9462-453c-bf81-991f65ccfaca
+	fromColumn: fact_teaching_assignment.subject_key
+	toColumn: dim_subject.subject_id
+
+relationship 75db3e35-c9f2-4896-aedc-30c507c77a86
+	fromColumn: fact_achievement.achievement_type_key
+	toColumn: dim_achievement_type.key
+
+relationship 15ca44f4-a83a-1917-352e-51a48ee043c4
+	fromColumn: fact_achievement.date_key
+	toColumn: dim_date.key
+
+relationship 77fdc324-ea02-86b9-225f-dd60c9bfa5a4
+	fromColumn: fact_assessment.date_key
+	toColumn: dim_date.key
+
+relationship e497a551-30d8-8dd1-b053-68fed0e24ca5
+	fromColumn: fact_attendance.date_key
+	toColumn: dim_date.key
+
+relationship fef47bb3-ab7e-91ef-b047-70c78dd2984d
+	fromColumn: fact_enrollment.date_key
+	toColumn: dim_date.key
+
+relationship 34231e69-e9ca-0c23-585b-362d8ec1f3ca
+	fromColumn: fact_payments.date_key
+	toColumn: dim_date.key
+
+relationship afec34e2-6586-93a0-a443-40b30306486b
+	fromColumn: fact_teaching_assignment.date_key
+	toColumn: dim_date.key
+
+relationship b127328d-51f4-152b-8ef3-416a5345bc06
+	crossFilteringBehavior: bothDirections
+	fromColumn: fact_enrollment.socioeconomic_status_key
+	toColumn: dim_socioeconomic_status.id
+
+relationship 048f9b1e-9e9b-d5db-ce70-66be94c8242c
+	fromColumn: fact_teaching_assignment.socioeconomic_status_key
+	toColumn: dim_socioeconomic_status.id
+
+relationship 08e068e3-ecb1-0924-2137-10c549774923
+	fromColumn: fact_achievement.socioeconomic_status_key
+	toColumn: dim_socioeconomic_status.id
+
+relationship e8560561-a7c9-8806-903d-604da5cbea42
+	fromColumn: fact_teaching_assignment.staff_race_key
+	toColumn: dim_race.id
+
+relationship 3ebcc61b-f916-86c1-dc86-c9ecba9a836c
+	fromColumn: fact_enrollment.grade_key
+	toColumn: dim_grade.id
+
+relationship AutoDetected_8ca9e45e-267b-4db6-a827-bdc60fcbaa42
+	fromColumn: fact_assessment.grade_key
+	toColumn: dim_grade.grade_key
+
+relationship 78d06bbe-cfc4-1042-5bba-bc96e4963836
+	fromColumn: fact_enrollment.student_key
+	toColumn: dim_student.id
+
+relationship 05b03782-9a98-f7be-089d-02b5764472cf
+	fromColumn: fact_achievement.student_key
+	toColumn: dim_student.student_key
+
+relationship 7c7feb05-ef26-4463-8ccf-9e99d9711ae5
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Query1.Month_Starting
+	toColumn: LocalDateTable_f6f44aed-f47a-425d-a4be-4f8b292fdcbd.Date
+
+relationship AutoDetected_f12ef67e-bfec-4109-9226-590ba18dafeb
+	fromColumn: Query1.school_key
+	toColumn: dim_school.school_id
+
+relationship AutoDetected_29929384-c015-43e6-a176-e16c4279a644
+	fromColumn: Query2.school_key
+	toColumn: dim_school.school_id
+
+relationship ecebe118-b667-8add-7d6f-64a8768da9c8
+	fromColumn: fact_attendance.student_key
+	toColumn: dim_student.id
+
+relationship d54c454d-12cf-68b2-b295-36aa69f7d7bb
+	fromColumn: fact_attendance.school_key
+	toColumn: dim_school.id
+

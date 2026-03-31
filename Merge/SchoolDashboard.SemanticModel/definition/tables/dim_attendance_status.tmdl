@@ -1,0 +1,95 @@
+table dim_attendance_status
+	lineageTag: 499a6685-aa49-437f-aab4-9d077d0bd3d3
+
+	column key
+		dataType: int64
+		formatString: 0
+		lineageTag: b2283f5f-4d10-4335-baef-73398e88f701
+		summarizeBy: none
+		sourceColumn: key
+
+		annotation SummarizationSetBy = User
+
+	column status_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 9ba459d1-0560-4503-8ed1-d0c5fdba148a
+		summarizeBy: none
+		sourceColumn: status_key
+
+		annotation SummarizationSetBy = User
+
+	column status_code
+		dataType: string
+		lineageTag: 1ca46748-42b6-4013-b3fc-544a37bee1e5
+		summarizeBy: none
+		sourceColumn: status_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column status_name
+		dataType: string
+		lineageTag: 3e0e72cc-c6f9-4592-8b21-ed236fad942c
+		summarizeBy: none
+		sourceColumn: status_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_by
+		dataType: string
+		lineageTag: d9f3347a-1924-41c6-aa57-bd6d30518565
+		summarizeBy: none
+		sourceColumn: created_by
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 04de5afa-e8cf-4a17-ac48-c483be6b03bc
+		summarizeBy: none
+		sourceColumn: created_at
+
+		variation Variation
+			isDefault
+			relationship: eabdb896-2a23-4ffe-bba7-d480ef2bdf7b
+			defaultHierarchy: LocalDateTable_91d086b3-16d1-473d-98cb-d0af2a50e373.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_by
+		dataType: string
+		lineageTag: 481461a1-83e5-494d-a2cc-cb0c871225e7
+		summarizeBy: none
+		sourceColumn: updated_by
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 4c08fde8-6fd0-4a57-9f29-7964c3176724
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		variation Variation
+			isDefault
+			relationship: a63358c4-7b3a-4340-8c14-7e0c97706c14
+			defaultHierarchy: LocalDateTable_dfe4d883-4e01-4c46-8338-34390425b63f.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_attendance_status = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("10.10.10.73", "school_db_olap_final"),
+				    dbo_v_dim_attendance_status = Source{[Schema="dbo",Item="v_dim_attendance_status"]}[Data],
+				    #"Renamed Columns" = Table.RenameColumns(dbo_v_dim_attendance_status,{{"id", "key"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

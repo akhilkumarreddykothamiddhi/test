@@ -1,0 +1,214 @@
+table fact_attendance
+	lineageTag: c03dc879-b2f5-4367-a5cd-727306bf1371
+
+	measure 'Attendance % PMTD' =
+			
+			CALCULATE(
+			    [Attendance % MTD],
+			    PARALLELPERIOD(dim_date[full_date], -1, MONTH)
+			)
+		lineageTag: ffa45204-79e4-4ca6-b66e-a8e090587286
+
+	measure 'Attendance % MTD' =
+			
+			TOTALMTD(
+			    [Attendance %],
+			    dim_date[full_date]
+			)
+		lineageTag: f9aab2f4-f2bb-4943-bcc2-ce70cf797788
+
+	measure 'Attendance % PQTD' =
+			
+			CALCULATE(
+			    [Attendance % QTD],
+			    PARALLELPERIOD(dim_date[full_date], -1, QUARTER)
+			)
+		lineageTag: 4b786f42-a477-4b97-946c-f5714ad2612e
+
+	measure 'Attendance % QTD' =
+			
+			TOTALQTD(
+			    [Attendance %],
+			    dim_date[full_date]
+			)
+		lineageTag: 63c42e3c-e55c-4d46-92dc-41cd63369c5c
+
+	measure 'Attendance % PYTD' =
+			
+			CALCULATE(
+			    [Attendance % YTD],
+			    SAMEPERIODLASTYEAR(dim_date[full_date])
+			)
+		lineageTag: 5327f113-fb95-411a-8332-6d2bb844fb85
+
+	measure 'Attendance % YTD' =
+			
+			TOTALYTD(
+			    [Attendance %],
+			    dim_date[full_date]
+			)
+		lineageTag: 191c9277-4c1c-4d41-9bad-717010214c2d
+
+	measure 'Promotion & Retention %' =
+			
+			VAR EligibleStudents =
+			    CALCULATE(
+			        DISTINCTCOUNT(dim_student[student_key]),
+			        fact_attendance[total_days] >= 75
+			    )
+			
+			VAR PromotedStudents =
+			    CALCULATE(
+			        DISTINCTCOUNT(dim_student[student_key]),
+			        fact_attendance[total_days] >= 75,
+			        fact_assessment[marks_obtained] = "Pass"
+			    )
+			
+			VAR PromotionRate =
+			    DIVIDE(PromotedStudents, EligibleStudents) * 100
+			
+			VAR RetentionRate =
+			    100 - PromotionRate
+			
+			RETURN
+			"Promotion: " & FORMAT(PromotionRate, "0.0") &
+			"% | Retention: " & FORMAT(RetentionRate, "0.0") & "%"
+		formatString: 0
+		lineageTag: 8f47d97b-6bfc-4f47-a824-88f6f74fb6d2
+
+	measure 'Attendance Rate' =
+			
+			DIVIDE(
+			    SUM(fact_attendance[days_present]),
+			    SUM(fact_attendance[total_days])
+			) * 100
+		lineageTag: 2bfb28f4-d9bb-4174-81fd-95285c296081
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Attendance %' =
+			
+			VAR TotalPresent = SUM('fact_attendance'[days_present])
+			VAR TotalPossible = SUM('fact_attendance'[total_days])
+			
+			RETURN
+			    DIVIDE(TotalPresent, TotalPossible, 0)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: c9f8e834-ad4c-40d4-b3a1-320f86c95800
+
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: a2f5c23a-1259-4424-b2ef-d8b40e209816
+		summarizeBy: none
+		sourceColumn: id
+
+		annotation SummarizationSetBy = User
+
+	column date_key
+		dataType: int64
+		formatString: 0
+		lineageTag: dde59bf5-398d-4d1d-b7b4-f81a7f474353
+		summarizeBy: none
+		sourceColumn: date_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column student_key
+		dataType: int64
+		formatString: 0
+		lineageTag: e58f5c15-b9a0-4e91-8cd2-610cdac82532
+		summarizeBy: none
+		sourceColumn: student_key
+
+		annotation SummarizationSetBy = User
+
+	column school_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 9a4fa89a-d082-485c-8495-bd8cc638431a
+		summarizeBy: none
+		sourceColumn: school_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column grade_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 1e2b1ef3-bf1b-4569-8cca-93591e0fbd98
+		summarizeBy: none
+		sourceColumn: grade_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column days_present
+		dataType: int64
+		formatString: 0
+		lineageTag: ee8a565c-d253-4ad9-90a7-7d2f66083988
+		summarizeBy: sum
+		sourceColumn: days_present
+
+		annotation SummarizationSetBy = Automatic
+
+	column days_absent
+		dataType: int64
+		formatString: 0
+		lineageTag: 35e53f5e-56f0-4cf9-9064-345f4f1ae1da
+		summarizeBy: sum
+		sourceColumn: days_absent
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_days
+		dataType: int64
+		formatString: 0
+		lineageTag: 76f6fb5b-0c4d-46fa-b79e-29ad944ebbf2
+		summarizeBy: sum
+		sourceColumn: total_days
+
+		annotation SummarizationSetBy = Automatic
+
+	column academic_year
+		dataType: string
+		lineageTag: cd34d2eb-02d4-4bda-93b0-bd6f51df5f73
+		summarizeBy: none
+		sourceColumn: academic_year
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_by
+		dataType: string
+		lineageTag: b6b8bc1b-850c-4fee-9532-2bd8498a6cda
+		summarizeBy: none
+		sourceColumn: created_by
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 05acb1b8-036c-4cd9-acae-00b613f1e070
+		summarizeBy: none
+		sourceColumn: created_at
+
+		variation Variation
+			isDefault
+			relationship: a90ae151-94f4-41b6-8ee8-28a7c4afc5e0
+			defaultHierarchy: LocalDateTable_a6023dfd-8952-4250-afa1-d4dd959125c7.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_attendance = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("10.10.10.73", "school_db_olap_final"),
+				    dbo_v_fact_attendance = Source{[Schema="dbo",Item="v_fact_attendance"]}[Data],
+				    #"Reordered Columns" = Table.ReorderColumns(dbo_v_fact_attendance,{"id", "date_key", "student_key", "school_key", "grade_key", "days_present", "days_absent", "total_days", "academic_year", "created_by", "created_at"})
+				in
+				    #"Reordered Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

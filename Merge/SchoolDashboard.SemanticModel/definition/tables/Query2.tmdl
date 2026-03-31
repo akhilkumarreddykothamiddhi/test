@@ -1,0 +1,87 @@
+table Query2
+	lineageTag: 02e379dc-6da9-4b22-bf53-a8b002f19f6e
+
+	column school_key
+		dataType: int64
+		formatString: 0
+		lineageTag: b4d40973-06b7-47cc-bc5e-a42fa6b6f99d
+		summarizeBy: none
+		sourceColumn: school_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column academic_year
+		dataType: string
+		lineageTag: d60abacd-689a-4577-bc7e-b9488eca94ff
+		summarizeBy: none
+		sourceColumn: academic_year
+
+		annotation SummarizationSetBy = Automatic
+
+	column Term_Name
+		dataType: string
+		lineageTag: f41fa16c-6db7-41be-845c-d50eddb849e2
+		summarizeBy: none
+		sourceColumn: Term_Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Total_Revenue
+		dataType: int64
+		formatString: 0
+		lineageTag: 4da5fa9f-323c-4b77-ae0a-56272c818d1b
+		summarizeBy: sum
+		sourceColumn: Total_Revenue
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Query2 = m
+		mode: import
+		source = ```
+				let
+				    Source = Sql.Database("10.10.10.73", "school_db_olap_final", [Query="SELECT 
+				    fa.school_key,
+				    fa.academic_year,
+				    -- Strict Mapping: Year 1 uses keys 1,2,3 | Year 2 uses keys 4,5,6
+				    CASE 
+				        WHEN fa.academic_year = '2024-2025' AND fa.term_key = 1 THEN 'Term 1'
+				        WHEN fa.academic_year = '2024-2025' AND fa.term_key = 2 THEN 'Term 2'
+				        WHEN fa.academic_year = '2024-2025' AND fa.term_key = 3 THEN 'Term 3'
+				        WHEN fa.academic_year = '2025-2026' AND fa.term_key = 4 THEN 'Term 1'
+				        WHEN fa.academic_year = '2025-2026' AND fa.term_key = 5 THEN 'Term 2'
+				        WHEN fa.academic_year = '2025-2026' AND fa.term_key = 6 THEN 'Term 3'
+				        ELSE NULL -- This handles any data outside these rules
+				    END AS Term_Name,
+				    SUM(fa.amount_paid) AS Total_Revenue
+				FROM fact_payments fa WITH (NOLOCK)
+				GROUP BY 
+				    fa.school_key, 
+				    fa.academic_year,
+				    CASE 
+				        WHEN fa.academic_year = '2024-2025' AND fa.term_key = 1 THEN 'Term 1'
+				        WHEN fa.academic_year = '2024-2025' AND fa.term_key = 2 THEN 'Term 2'
+				        WHEN fa.academic_year = '2024-2025' AND fa.term_key = 3 THEN 'Term 3'
+				        WHEN fa.academic_year = '2025-2026' AND fa.term_key = 4 THEN 'Term 1'
+				        WHEN fa.academic_year = '2025-2026' AND fa.term_key = 5 THEN 'Term 2'
+				        WHEN fa.academic_year = '2025-2026' AND fa.term_key = 6 THEN 'Term 3'
+				        ELSE NULL 
+				    END
+				HAVING 
+				    -- This filters out the 'NULL' rows so they don't show up in your slicer
+				    CASE 
+				        WHEN fa.academic_year = '2024-2025' AND fa.term_key = 1 THEN 'Term 1'
+				        WHEN fa.academic_year = '2024-2025' AND fa.term_key = 2 THEN 'Term 2'
+				        WHEN fa.academic_year = '2024-2025' AND fa.term_key = 3 THEN 'Term 3'
+				        WHEN fa.academic_year = '2025-2026' AND fa.term_key = 4 THEN 'Term 1'
+				        WHEN fa.academic_year = '2025-2026' AND fa.term_key = 5 THEN 'Term 2'
+				        WHEN fa.academic_year = '2025-2026' AND fa.term_key = 6 THEN 'Term 3'
+				        ELSE NULL 
+				    END IS NOT NULL;"])
+				in
+				    Source
+				```
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

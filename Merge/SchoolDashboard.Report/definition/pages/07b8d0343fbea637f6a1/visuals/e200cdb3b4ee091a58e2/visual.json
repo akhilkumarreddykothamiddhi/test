@@ -1,0 +1,16 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.7.0/schema.json",
+  "name": "e200cdb3b4ee091a58e2",
+  "position": {
+    "x": 105.97245657169488,
+    "y": 154.02207973774287,
+    "z": 1000,
+    "height": 254.72882418165165,
+    "width": 36.2017708785293,
+    "tabOrder": 11
+  },
+  "visualGroup": {
+    "displayName": "sidebar_icons",
+    "groupMode": "ScaleMode"
+  }
+}

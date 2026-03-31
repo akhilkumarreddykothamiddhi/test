@@ -1,0 +1,60 @@
+table dim_grade
+	lineageTag: 598132c2-83ab-40bf-8d28-f8c4427da353
+
+	column grade_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 614a7c78-7037-43f8-a914-f4274ec9b743
+		summarizeBy: none
+		sourceColumn: grade_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column grade_name
+		dataType: string
+		lineageTag: 5272e675-62c9-4ae9-918b-ae4188b909f1
+		summarizeBy: none
+		sourceColumn: grade_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column grade_order
+		dataType: int64
+		formatString: 0
+		lineageTag: a955896e-fbac-46c6-8056-a6008b714b67
+		summarizeBy: none
+		sourceColumn: grade_order
+
+		annotation SummarizationSetBy = User
+
+	column created_by
+		dataType: string
+		lineageTag: bc3373df-96b4-463a-b235-ee215fade91c
+		summarizeBy: none
+		sourceColumn: created_by
+
+		annotation SummarizationSetBy = Automatic
+
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: 558946e9-dd95-4ae8-ad30-550d244f036a
+		summarizeBy: none
+		sourceColumn: id
+
+		annotation SummarizationSetBy = User
+
+	partition dim_grade = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("10.10.10.73", "school_db_olap_final"),
+				    dbo_v_dim_grade = Source{[Schema="dbo",Item="v_dim_grade"]}[Data],
+				    #"Renamed Columns" = Table.RenameColumns(dbo_v_dim_grade,{{"id", "id"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

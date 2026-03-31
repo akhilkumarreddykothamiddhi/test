@@ -1,0 +1,103 @@
+table dim_payment_type
+	lineageTag: ee2aaee0-c719-499d-899f-f1f38abfe51b
+
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: 290cf083-2d4f-439d-8d09-fe55a83fc73a
+		summarizeBy: none
+		sourceColumn: id
+
+		annotation SummarizationSetBy = User
+
+	column payment_type_id
+		dataType: int64
+		formatString: 0
+		lineageTag: db00ea92-2d93-4ee9-9a9b-75b3199e0546
+		summarizeBy: none
+		sourceColumn: payment_type_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_type_code
+		dataType: string
+		lineageTag: 14f54da7-e989-439f-b762-7f9e9a44e00f
+		summarizeBy: none
+		sourceColumn: payment_type_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_category
+		dataType: string
+		lineageTag: b1c59379-6463-4019-8d2f-5411309263b1
+		summarizeBy: none
+		sourceColumn: payment_category
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_method
+		dataType: string
+		lineageTag: cb681e83-9219-4e92-bc5e-c6aee5b52c36
+		summarizeBy: none
+		sourceColumn: payment_method
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_by
+		dataType: string
+		lineageTag: c8602c46-4fdc-4b7d-bb04-41ddaca79f44
+		summarizeBy: none
+		sourceColumn: created_by
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 1d7edbf8-a746-4fa2-9b5f-23bd2a56cccf
+		summarizeBy: none
+		sourceColumn: created_at
+
+		variation Variation
+			isDefault
+			relationship: ed847e84-7be0-413c-a3b0-f8bdead17f3e
+			defaultHierarchy: LocalDateTable_fabe3f67-2b5c-4f36-8467-7c80383e67ac.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_by
+		dataType: string
+		lineageTag: 7263d130-520c-4164-9de1-3e97b6322e7c
+		summarizeBy: none
+		sourceColumn: updated_by
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: c546c10a-c8f8-434a-aeeb-1dd11e068d29
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		variation Variation
+			isDefault
+			relationship: 7c7a1fad-582a-4d61-822f-727e50847451
+			defaultHierarchy: LocalDateTable_f2c57f20-33d6-4d73-8ce2-6bd28efbd127.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_payment_type = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("10.10.10.73", "school_db_olap_final"),
+				    dbo_v_dim_payment_type = Source{[Schema="dbo",Item="v_dim_payment_type"]}[Data],
+				    #"Renamed Columns" = Table.RenameColumns(dbo_v_dim_payment_type,{{"payment_type_key", "payment_type_id"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

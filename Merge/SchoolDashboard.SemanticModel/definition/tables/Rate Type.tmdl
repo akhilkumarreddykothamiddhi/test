@@ -1,0 +1,36 @@
+table 'Rate Type'
+	lineageTag: da4fd2c2-a8ea-46a5-bc8d-f5193429dbfe
+
+	measure 'Dynamic Title' =
+			
+			VAR SelectedType = SELECTEDVALUE('Rate Type'[Type], "Pass Rate")
+			RETURN
+			SWITCH(
+			    SelectedType,
+			    "Pass Rate", "Pass % by Gender",
+			    "Fail Rate", "Fail % by Gender"
+			)
+		lineageTag: 02eac425-1772-49cb-9136-7f459dcc5560
+
+	column Type
+		lineageTag: f4bdb488-9e40-47c5-bda0-d8c40daf7646
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Type]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Rate Type' = calculated
+		mode: import
+		source =
+				
+				DATATABLE(
+				    "Type", STRING,
+				    {
+				        {"Pass Rate"},
+				        {"Fail Rate"}
+				    }
+				)
+
+	annotation PBI_Id = 72161acd3f824b809e67881f5057fc9f
+

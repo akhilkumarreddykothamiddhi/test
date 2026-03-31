@@ -1,0 +1,79 @@
+table dim_socioeconomic_status
+	lineageTag: 6d206afb-9435-4304-971c-cfbc54b119ae
+
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: 62611c54-eb1f-4615-9db2-eb4058aa42d4
+		summarizeBy: none
+		sourceColumn: id
+
+		annotation SummarizationSetBy = Automatic
+
+	column StatusName
+		dataType: string
+		lineageTag: 917b4cd7-8895-4517-82e8-11ec6bc22324
+		summarizeBy: none
+		sourceColumn: StatusName
+
+		annotation SummarizationSetBy = Automatic
+
+	column CreatedAt
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 32439498-fcd8-45fd-830d-bceaf85aeaf7
+		summarizeBy: none
+		sourceColumn: CreatedAt
+
+		variation Variation
+			isDefault
+			relationship: 5ccaa074-1534-4e2f-92ee-5df561a06000
+			defaultHierarchy: LocalDateTable_9ffe6597-14a0-4ff5-901f-30de494c9a29.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column CreatedBy
+		dataType: string
+		lineageTag: bb337b63-4e0c-45db-b011-fee993475f1d
+		summarizeBy: none
+		sourceColumn: CreatedBy
+
+		annotation SummarizationSetBy = Automatic
+
+	column UpdatedAt
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 0f8c6252-dfed-466c-8747-cd071257325b
+		summarizeBy: none
+		sourceColumn: UpdatedAt
+
+		variation Variation
+			isDefault
+			relationship: cbee113b-0e29-4206-ab0d-cf7b45b78cbe
+			defaultHierarchy: LocalDateTable_33eb9d54-abde-403a-9b1d-956bf004a5fa.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column UpdatedBy
+		dataType: string
+		lineageTag: 568c3732-0400-42a4-b0e0-36fec28d5a22
+		summarizeBy: none
+		sourceColumn: UpdatedBy
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_socioeconomic_status = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("10.10.10.73", "school_db_olap_final"),
+				    dbo_Dim_SocioeconomicStatus = Source{[Schema="dbo",Item="Dim_SocioeconomicStatus"]}[Data],
+				    #"Renamed Columns" = Table.RenameColumns(dbo_Dim_SocioeconomicStatus,{{"SES_Key", "id"}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Renamed Columns",{"fact_achievement(SES_Key)", "fact_achievement(SES_Key) 2", "fact_enrollment", "fact_teaching_assignment(SES_Key)", "fact_teaching_assignment(SES_Key) 2"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

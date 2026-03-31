@@ -1,0 +1,53 @@
+table dim_achievement_type
+	lineageTag: 721dfd66-a410-4640-b28a-eba44fe282cc
+
+	column key
+		dataType: int64
+		formatString: 0
+		lineageTag: 7c63be3f-4107-4b9b-9447-2e400c73f46c
+		summarizeBy: none
+		sourceColumn: key
+
+		annotation SummarizationSetBy = Automatic
+
+	column achievement_key
+		dataType: int64
+		formatString: 0
+		lineageTag: f5bff0a8-35a3-43f2-a941-0b30ce40e3df
+		summarizeBy: none
+		sourceColumn: achievement_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column achievement_name
+		dataType: string
+		lineageTag: ab9ae613-8a83-4b6a-bccf-340ff6758d36
+		summarizeBy: none
+		sourceColumn: achievement_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column category
+		dataType: string
+		lineageTag: b5810f38-f426-4bf3-b7f9-d04dd5cde47a
+		summarizeBy: none
+		sourceColumn: category
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_achievement_type = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("10.10.10.73", "school_db_olap_final"),
+				   dbo_dim_achievement_type = Source{[Schema="dbo",Item="dim_achievement_type"]}[Data],
+				    #"Renamed Columns" = Table.RenameColumns(dbo_dim_achievement_type,{{"achievement_type_key", "id"}, {"oltp_achievement_id", "achievement_id"}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Renamed Columns",{"fact_achievement"}),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Removed Columns",{{"achievement_id", "achievement_key"}, {"id", "key"}})
+				in
+				    #"Renamed Columns1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

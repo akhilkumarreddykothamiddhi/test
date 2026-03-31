@@ -1,0 +1,131 @@
+table dim_date
+	lineageTag: 9c8b1247-13a3-4790-a506-7463d21c5dce
+
+	column key
+		dataType: int64
+		formatString: 0
+		lineageTag: f36f4b19-cd11-4468-9a81-a40a7123a587
+		summarizeBy: none
+		sourceColumn: key
+
+		annotation SummarizationSetBy = Automatic
+
+	column full_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 946ffa59-73f2-492d-ade2-268190fe6553
+		summarizeBy: none
+		sourceColumn: full_date
+
+		variation Variation
+			isDefault
+			relationship: 2e90c043-0c1d-4b87-a8ba-c2a91394e1ee
+			defaultHierarchy: LocalDateTable_f019ac5d-fa93-4d34-9b0e-574f5d662b0f.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column day
+		dataType: int64
+		formatString: 0
+		lineageTag: 1c1fec8e-0395-4645-89d0-bb5ba17486a5
+		summarizeBy: none
+		sourceColumn: day
+
+		annotation SummarizationSetBy = User
+
+	column week
+		dataType: int64
+		formatString: 0
+		lineageTag: 0f736354-ad04-4e84-86a2-77d28b244e2e
+		summarizeBy: none
+		sourceColumn: week
+
+		annotation SummarizationSetBy = User
+
+	column month
+		dataType: int64
+		formatString: 0
+		lineageTag: 1e052383-4d65-440a-8b3c-82a6cf266512
+		summarizeBy: none
+		sourceColumn: month
+
+		annotation SummarizationSetBy = User
+
+	column quarter
+		dataType: int64
+		formatString: 0
+		lineageTag: 3f6b0a48-99ed-436b-8374-a0ca535b3dd2
+		summarizeBy: none
+		sourceColumn: quarter
+
+		annotation SummarizationSetBy = User
+
+	column year
+		dataType: int64
+		formatString: 0
+		lineageTag: c8b18b99-c6cc-4b03-a478-2755c4afd144
+		summarizeBy: none
+		sourceColumn: year
+
+		annotation SummarizationSetBy = User
+
+	column created_by
+		dataType: string
+		lineageTag: f6671d4a-b61a-409d-8d03-3c0dea362ffd
+		summarizeBy: none
+		sourceColumn: created_by
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 96491f61-9b64-494c-ab2f-a77b27d9a790
+		summarizeBy: none
+		sourceColumn: created_at
+
+		variation Variation
+			isDefault
+			relationship: 1e4a120e-92dc-40cf-b019-1af873b07056
+			defaultHierarchy: LocalDateTable_a8b350da-2198-4321-aea1-118343eeb9f8.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_by
+		dataType: string
+		lineageTag: 4a886ef6-457b-4576-bace-e4c93df7ae27
+		summarizeBy: none
+		sourceColumn: updated_by
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: decd6c87-c0d4-4ef5-afc7-a3b255f5d88f
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		variation Variation
+			isDefault
+			relationship: 913e478f-7eae-4976-9c98-812b90a1c1a4
+			defaultHierarchy: LocalDateTable_d0ded880-1ec2-4a1a-b13a-7353c52e214f.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_date = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("10.10.10.73", "school_db_olap_final"),
+				    dbo_v_dim_date = Source{[Schema="dbo",Item="v_dim_date"]}[Data],
+				    #"Renamed Columns" = Table.RenameColumns(dbo_v_dim_date,{{"id", "key"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

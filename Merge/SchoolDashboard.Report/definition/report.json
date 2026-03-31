@@ -1,0 +1,183 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/3.2.0/schema.json",
+  "themeCollection": {
+    "baseTheme": {
+      "name": "CY26SU02",
+      "reportVersionAtImport": {
+        "visual": "2.6.0",
+        "report": "3.1.0",
+        "page": "2.3.0"
+      },
+      "type": "SharedResources"
+    },
+    "customTheme": {
+      "name": "Custom2021966555720277.json",
+      "reportVersionAtImport": {
+        "visual": "2.7.0",
+        "report": "3.2.0",
+        "page": "2.3.1"
+      },
+      "type": "RegisteredResources"
+    }
+  },
+  "objects": {
+    "section": [
+      {
+        "properties": {
+          "verticalAlignment": {
+            "expr": {
+              "Literal": {
+                "Value": "'Top'"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "outspacePane": [
+      {
+        "properties": {
+          "expanded": {
+            "expr": {
+              "Literal": {
+                "Value": "false"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "resourcePackages": [
+    {
+      "name": "SharedResources",
+      "type": "SharedResources",
+      "items": [
+        {
+          "name": "CY26SU02",
+          "path": "BaseThemes/CY26SU02.json",
+          "type": "BaseTheme"
+        }
+      ]
+    },
+    {
+      "name": "RegisteredResources",
+      "type": "RegisteredResources",
+      "items": [
+        {
+          "name": "attendant-list09030813269908577.png",
+          "path": "attendant-list09030813269908577.png",
+          "type": "Image"
+        },
+        {
+          "name": "classroom07897921463496216.png",
+          "path": "classroom07897921463496216.png",
+          "type": "Image"
+        },
+        {
+          "name": "Custom2021966555720277.json",
+          "path": "Custom2021966555720277.json",
+          "type": "CustomTheme"
+        },
+        {
+          "name": "icons8-achivement-648214260152708915.png",
+          "path": "icons8-achivement-648214260152708915.png",
+          "type": "Image"
+        },
+        {
+          "name": "icons8-attendance-64047309657079394274.png",
+          "path": "icons8-attendance-64047309657079394274.png",
+          "type": "Image"
+        },
+        {
+          "name": "icons8-detail-486044397733657854.png",
+          "path": "icons8-detail-486044397733657854.png",
+          "type": "Image"
+        },
+        {
+          "name": "icons8-growth-485083110908934324.png",
+          "path": "icons8-growth-485083110908934324.png",
+          "type": "Image"
+        },
+        {
+          "name": "icons8-homepage-489735117901405651.png",
+          "path": "icons8-homepage-489735117901405651.png",
+          "type": "Image"
+        },
+        {
+          "name": "icons8-male-student-100619891834146153.png",
+          "path": "icons8-male-student-100619891834146153.png",
+          "type": "Image"
+        },
+        {
+          "name": "icons8-percentage-1001718134713892664.png",
+          "path": "icons8-percentage-1001718134713892664.png",
+          "type": "Image"
+        },
+        {
+          "name": "icons8-profit-10020990061542879168.png",
+          "path": "icons8-profit-10020990061542879168.png",
+          "type": "Image"
+        },
+        {
+          "name": "icons8-school-48_(1)6709730475604971.png",
+          "path": "icons8-school-48_(1)6709730475604971.png",
+          "type": "Image"
+        },
+        {
+          "name": "icons8-school-48_(2)33927545736345.png",
+          "path": "icons8-school-48_(2)33927545736345.png",
+          "type": "Image"
+        },
+        {
+          "name": "icons8-school-48418691942427333.png",
+          "path": "icons8-school-48418691942427333.png",
+          "type": "Image"
+        },
+        {
+          "name": "icons8-students-487230528586713005.png",
+          "path": "icons8-students-487230528586713005.png",
+          "type": "Image"
+        },
+        {
+          "name": "icons8-teacher-1005646443011349176.png",
+          "path": "icons8-teacher-1005646443011349176.png",
+          "type": "Image"
+        },
+        {
+          "name": "icons8-teacher-644240207195493846.png",
+          "path": "icons8-teacher-644240207195493846.png",
+          "type": "Image"
+        },
+        {
+          "name": "icons8-test-cheating-484442098775063953.png",
+          "path": "icons8-test-cheating-484442098775063953.png",
+          "type": "Image"
+        },
+        {
+          "name": "icons8-woman-student-50340751212279075.png",
+          "path": "icons8-woman-student-50340751212279075.png",
+          "type": "Image"
+        },
+        {
+          "name": "Smooth_blue_gradient_backgroun8775823907159724.png",
+          "path": "Smooth_blue_gradient_backgroun8775823907159724.png",
+          "type": "Image"
+        },
+        {
+          "name": "Techwish-Logo-white7204480929786804.png",
+          "path": "Techwish-Logo-white7204480929786804.png",
+          "type": "Image"
+        }
+      ]
+    }
+  ],
+  "settings": {
+    "useStylableVisualContainerHeader": true,
+    "exportDataMode": "AllowSummarized",
+    "defaultDrillFilterOtherVisuals": true,
+    "allowChangeFilterTypes": true,
+    "useEnhancedTooltips": true,
+    "useDefaultAggregateDisplayName": true
+  }
+}

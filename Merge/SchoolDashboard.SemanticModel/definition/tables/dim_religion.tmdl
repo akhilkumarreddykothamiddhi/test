@@ -1,0 +1,58 @@
+table dim_religion
+	lineageTag: f9e850bd-d4a8-470c-83b3-4453e175567e
+
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: 228f911a-05fb-4d3f-be39-568589d75342
+		summarizeBy: none
+		sourceColumn: id
+
+		annotation SummarizationSetBy = User
+
+	column religion_id
+		dataType: int64
+		formatString: 0
+		lineageTag: a6258f60-0c99-4339-b9b7-a86b94b6bf1c
+		summarizeBy: none
+		sourceColumn: religion_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column religion_name
+		dataType: string
+		lineageTag: f76fb95b-044f-47d9-94e5-0238036042e5
+		summarizeBy: none
+		sourceColumn: religion_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 757701a0-70a5-48af-83ef-0c6e790edb8e
+		summarizeBy: none
+		sourceColumn: created_at
+
+		variation Variation
+			isDefault
+			relationship: f50447ed-fee8-4ce1-8351-717f867cde9a
+			defaultHierarchy: LocalDateTable_38447453-c4fa-45d2-9417-4c1a550c9353.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_religion = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("10.10.10.73", "school_db_olap_final"),
+				    dbo_v_dim_religion = Source{[Schema="dbo",Item="v_dim_religion"]}[Data],
+				    #"Reordered Columns" = Table.ReorderColumns(dbo_v_dim_religion,{"id", "religion_key", "religion_name", "created_at"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Reordered Columns",{{"religion_key", "religion_id"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,83 @@
+table dim_assessment_type
+	lineageTag: 37a8658b-738c-43df-b875-ca0db69f0fcc
+
+	column key
+		dataType: int64
+		formatString: 0
+		lineageTag: 00db2cff-e490-41b6-8fe7-76c6f0ebe889
+		summarizeBy: none
+		sourceColumn: key
+
+		annotation SummarizationSetBy = User
+
+	column assessment_type_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 631ca3bf-0ede-4ead-85a7-1bf2a37d7443
+		summarizeBy: none
+		sourceColumn: assessment_type_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column type_name
+		dataType: string
+		lineageTag: d1cd42b8-6258-4e22-8d7f-8475a38a04fb
+		summarizeBy: none
+		sourceColumn: type_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column type_code
+		dataType: string
+		lineageTag: 1a609766-1c76-4d2f-bbd3-137ac9773393
+		summarizeBy: none
+		sourceColumn: type_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column weightage
+		dataType: double
+		lineageTag: f6d0346d-97c7-41d7-a3f4-90854a6879fa
+		summarizeBy: sum
+		sourceColumn: weightage
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: fa00590c-2a7f-43ba-89a6-0005204be46b
+		summarizeBy: none
+		sourceColumn: created_at
+
+		variation Variation
+			isDefault
+			relationship: d25640a6-962d-4964-b046-7be8811da74f
+			defaultHierarchy: LocalDateTable_b4f37ddd-ff07-43a2-be0b-53aa0020b537.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_by
+		dataType: string
+		lineageTag: 9618d3ca-a40e-4bd5-af7c-4b58911c2301
+		summarizeBy: none
+		sourceColumn: created_by
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_assessment_type = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("10.10.10.73", "school_db_olap_final"),
+				    dbo_v_dim_assessment_type = Source{[Schema="dbo",Item="v_dim_assessment_type"]}[Data],
+				    #"Renamed Columns" = Table.RenameColumns(dbo_v_dim_assessment_type,{{"assessment_type_key", "assessment_type_key"}, {"id", "key"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

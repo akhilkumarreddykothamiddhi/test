@@ -1,0 +1,180 @@
+table dim_student
+	lineageTag: a68448ce-f613-4a30-9646-6b63d8c9ba06
+
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: fdc27ea1-39b2-4d91-a8ab-5b5dc79f0e2d
+		summarizeBy: none
+		sourceColumn: id
+
+		annotation SummarizationSetBy = User
+
+	column student_key
+		dataType: int64
+		formatString: 0
+		lineageTag: c9a1ea22-42bc-49dc-ab2d-afe195e73904
+		summarizeBy: none
+		sourceColumn: student_key
+
+		annotation SummarizationSetBy = User
+
+	column first_name
+		dataType: string
+		lineageTag: ff5a07e4-95b0-4c08-a72c-2e0c1b94e4b5
+		summarizeBy: none
+		sourceColumn: first_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column last_name
+		dataType: string
+		lineageTag: 28a05bbe-fe7f-4a8a-a0b7-b7021344bb6d
+		summarizeBy: none
+		sourceColumn: last_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column gender
+		dataType: string
+		lineageTag: 6fec6bee-a055-4662-a4b4-c0e9aa48bda0
+		summarizeBy: none
+		sourceColumn: gender
+
+		annotation SummarizationSetBy = Automatic
+
+	column date_of_birth
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: f8840f73-4231-4b63-8666-a5070d360dd9
+		summarizeBy: none
+		sourceColumn: date_of_birth
+
+		variation Variation
+			isDefault
+			relationship: b7832321-8aee-4cdf-9a1d-cb473e9426e5
+			defaultHierarchy: LocalDateTable_f881a505-962d-4b16-824d-2ed138255eb7.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column admission_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 3a8b5d0a-79d5-4bfc-bef0-ca42ab65ff0c
+		summarizeBy: none
+		sourceColumn: admission_date
+
+		variation Variation
+			isDefault
+			relationship: 1b60e5a3-729f-4a79-8e38-41acc0b32f6f
+			defaultHierarchy: LocalDateTable_2fb7541b-84ec-47ad-b83a-ad98a69276fc.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column academic_year
+		dataType: string
+		lineageTag: 24b857c8-c469-4f24-ad07-3070e9db0d99
+		summarizeBy: none
+		sourceColumn: academic_year
+
+		annotation SummarizationSetBy = Automatic
+
+	column contact_number
+		dataType: string
+		lineageTag: ebfd69b1-c1fd-4741-9638-dc44367af92c
+		summarizeBy: none
+		sourceColumn: contact_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column current_status
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 29a74159-a005-433b-89ff-5778bcd0f4e9
+		summarizeBy: none
+		sourceColumn: current_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: b1eae2a3-7de7-475f-8ff8-6f78e05cf0eb
+		summarizeBy: none
+		sourceColumn: created_at
+
+		variation Variation
+			isDefault
+			relationship: 281684be-0940-4cb8-bab0-54bc7ea1507c
+			defaultHierarchy: LocalDateTable_fa63ddd4-b0d5-400e-9f30-7a876083b937.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_by
+		dataType: string
+		lineageTag: 81d552c0-5b71-4c74-8c36-be2e8944269f
+		summarizeBy: none
+		sourceColumn: created_by
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_by
+		dataType: string
+		lineageTag: a57fc1b5-515f-4cb9-8a9f-9f7e399b2673
+		summarizeBy: none
+		sourceColumn: updated_by
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 3dc8874a-3252-4cee-8610-31708a69f636
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		variation Variation
+			isDefault
+			relationship: 33a8a4db-f1b3-451b-8f6d-b1dd222a8602
+			defaultHierarchy: LocalDateTable_d2e18bfd-5747-4569-afc2-d8c5c6e5855a.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'full name' = CONCATENATE(dim_student[first_name],dim_student[last_name])
+		lineageTag: 5a135da1-3cfc-42da-aa56-f5aa0c4331d5
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Gender Full' =
+			
+			SWITCH(
+			    TRUE(),
+			    'dim_student'[Gender] = "M", "Male",
+			    'dim_student'[Gender] = "F", "Female",
+			    BLANK()
+			)
+		lineageTag: 94b06af9-8db3-4915-984e-eb114451405c
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_student = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("10.10.10.73", "school_db_olap_final"),
+				    dbo_v_dim_student = Source{[Schema="dbo",Item="v_dim_student"]}[Data],
+				    #"Reordered Columns" = Table.ReorderColumns(dbo_v_dim_student,{"id", "student_key", "first_name", "last_name", "gender", "date_of_birth", "admission_date", "academic_year", "contact_number", "current_status", "created_at", "created_by", "updated_by", "updated_at"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Reordered Columns",{{"student_key", "student_key"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,333 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 103.95480010469082,
+        "y": 812.429395772643
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 358.11972468584327,
+            "y": 1984.0083163911527
+          },
+          "nodeIndex": "dim_achievement_type",
+          "nodeLineageTag": "721dfd66-a410-4640-b28a-eba44fe282cc",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 15
+        },
+        {
+          "location": {
+            "x": 1961.3731505991609,
+            "y": 1599.1255637619779
+          },
+          "nodeIndex": "dim_assessment",
+          "nodeLineageTag": "f1b9efb8-729c-4544-889e-201711ba5cd8",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 1
+        },
+        {
+          "location": {
+            "x": 1684.7064019478992,
+            "y": 2155.527666546936
+          },
+          "nodeIndex": "dim_assessment_type",
+          "nodeLineageTag": "37a8658b-738c-43df-b875-ca0db69f0fcc",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 2
+        },
+        {
+          "location": {
+            "x": 2244.1736323114578,
+            "y": 1880.3952970213645
+          },
+          "nodeIndex": "dim_attendance_status",
+          "nodeLineageTag": "499a6685-aa49-437f-aab4-9d077d0bd3d3",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 16
+        },
+        {
+          "location": {
+            "x": 2602.4893370867517,
+            "y": 1375.7978384169228
+          },
+          "nodeIndex": "dim_date",
+          "nodeLineageTag": "9c8b1247-13a3-4790-a506-7463d21c5dce",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 19
+        },
+        {
+          "location": {
+            "x": 865.21577483209239,
+            "y": 796.55154007348688
+          },
+          "nodeIndex": "dim_grade",
+          "nodeLineageTag": "598132c2-83ab-40bf-8d28-f8c4427da353",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 3
+        },
+        {
+          "location": {
+            "x": 1352.9649933660924,
+            "y": 1962.3978198272016
+          },
+          "nodeIndex": "dim_payment_term",
+          "nodeLineageTag": "d46d47f2-0a12-46d5-81be-1220ae5fcb52",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 4
+        },
+        {
+          "location": {
+            "x": 440.47861287304795,
+            "y": 2328.1365398605863
+          },
+          "nodeIndex": "dim_payment_type",
+          "nodeLineageTag": "ee2aaee0-c719-499d-899f-f1f38abfe51b",
+          "size": {
+            "height": 296,
+            "width": 234
+          },
+          "zIndex": 5
+        },
+        {
+          "location": {
+            "x": 364.75504560907626,
+            "y": 765.01366647963528
+          },
+          "nodeIndex": "dim_race",
+          "nodeLineageTag": "4e1d2fe0-49e7-4b40-96c7-d7ec8089b919",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 6
+        },
+        {
+          "location": {
+            "x": 88.861328739659029,
+            "y": 2240.733256072629
+          },
+          "nodeIndex": "dim_religion",
+          "nodeLineageTag": "f9e850bd-d4a8-470c-83b3-4453e175567e",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 7
+        },
+        {
+          "location": {
+            "x": 700.65357650731141,
+            "y": 1658.7543998496753
+          },
+          "nodeIndex": "dim_school",
+          "nodeLineageTag": "04617521-8f9a-4c90-b8a7-38f1ab7e9adc",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 8
+        },
+        {
+          "location": {
+            "x": 2864.852568926889,
+            "y": 1023.8364710773903
+          },
+          "nodeIndex": "dim_socioeconomic_status",
+          "nodeLineageTag": "6d206afb-9435-4304-971c-cfbc54b119ae",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 18
+        },
+        {
+          "location": {
+            "x": 1412.8440751349092,
+            "y": 802.70148891291433
+          },
+          "nodeIndex": "dim_staff",
+          "nodeLineageTag": "08cd9530-19d7-465d-94f1-256c777e1a9c",
+          "size": {
+            "height": 296,
+            "width": 234
+          },
+          "zIndex": 9
+        },
+        {
+          "location": {
+            "x": 1205.1799439955689,
+            "y": 1589.2986775113618
+          },
+          "nodeIndex": "dim_student",
+          "nodeLineageTag": "a68448ce-f613-4a30-9646-6b63d8c9ba06",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 10
+        },
+        {
+          "location": {
+            "x": 1769.4253575132841,
+            "y": 948.81810539477
+          },
+          "nodeIndex": "dim_subject",
+          "nodeLineageTag": "b9dd3f2f-1437-4a7b-ad12-88cddeb4a5c5",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 11
+        },
+        {
+          "location": {
+            "x": 274.20502821731247,
+            "y": 1480.4895081212883
+          },
+          "nodeIndex": "fact_achievement",
+          "nodeLineageTag": "f4e25b64-c8a6-41a2-894e-1911536cb6d0",
+          "size": {
+            "height": 296,
+            "width": 234
+          },
+          "zIndex": 21
+        },
+        {
+          "location": {
+            "x": 1601.3448582987771,
+            "y": 1672.6818424022135
+          },
+          "nodeIndex": "fact_assessment",
+          "nodeLineageTag": "4f37a90b-6348-4aff-b885-04276f8ed20c",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 17
+        },
+        {
+          "location": {
+            "x": 1282.7782129385246,
+            "y": 1119.3629620691383
+          },
+          "nodeIndex": "fact_attendance",
+          "nodeLineageTag": "c03dc879-b2f5-4367-a5cd-727306bf1371",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 12
+        },
+        {
+          "location": {
+            "x": 52.935114282619,
+            "y": 985.13594854687221
+          },
+          "nodeIndex": "fact_enrollment",
+          "nodeLineageTag": "5777b655-e39f-4994-b2aa-bf5747026bc9",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 20
+        },
+        {
+          "location": {
+            "x": 780.885233205458,
+            "y": 2070.1189244104166
+          },
+          "nodeIndex": "fact_payments",
+          "nodeLineageTag": "124887c7-95b8-4c51-aaf7-54f82f26fd9f",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 13
+        },
+        {
+          "location": {
+            "x": 2197.8823023986674,
+            "y": 814.42751935264346
+          },
+          "nodeIndex": "fact_teaching_assignment",
+          "nodeLineageTag": "cba0e78b-0390-4c3d-97a6-c401623193da",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 14
+        },
+        {
+          "location": {
+            "x": 3095.91745464427,
+            "y": 1367.9043871761446
+          },
+          "nodeIndex": "Query1",
+          "nodeLineageTag": "537a10f8-9270-4bfc-a386-7e007345d3a2",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 3326.982340361651,
+            "y": 1266.5690291791616
+          },
+          "nodeIndex": "Query2",
+          "nodeLineageTag": "02e379dc-6da9-4b22-bf53-a8b002f19f6e",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 3558.047226079032,
+            "y": 1084.5659921836873
+          },
+          "nodeIndex": "Rate Type",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 59,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

@@ -1,0 +1,58 @@
+table dim_race
+	lineageTag: 4e1d2fe0-49e7-4b40-96c7-d7ec8089b919
+
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: d327b1e0-3623-492f-8b8f-094ebe4ab060
+		summarizeBy: none
+		sourceColumn: id
+
+		annotation SummarizationSetBy = User
+
+	column race_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 007de7f3-28ee-47c2-b08c-8750553541ab
+		summarizeBy: none
+		sourceColumn: race_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column race_name
+		dataType: string
+		lineageTag: a04bc5d5-2c65-49dd-a150-01fce360fe87
+		summarizeBy: none
+		sourceColumn: race_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: d84d7927-3872-4bcc-9367-dfb831ee58ed
+		summarizeBy: none
+		sourceColumn: created_at
+
+		variation Variation
+			isDefault
+			relationship: 652190cf-87a4-4a6e-bac8-dda11d1f725e
+			defaultHierarchy: LocalDateTable_d1f89d01-d78d-4532-b762-e4b4965dcbfa.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_race = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("10.10.10.73", "school_db_olap_final"),
+				    dbo_v_dim_race = Source{[Schema="dbo",Item="v_dim_race"]}[Data],
+				    #"Reordered Columns" = Table.ReorderColumns(dbo_v_dim_race,{"id", "race_key", "race_name", "created_at"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Reordered Columns",{{"race_key", "race_id"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

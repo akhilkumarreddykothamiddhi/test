@@ -1,0 +1,362 @@
+table fact_enrollment
+	lineageTag: 5777b655-e39f-4994-b2aa-bf5747026bc9
+
+	measure '% Students by Race' =
+			
+			VAR StudentsInSelectedRace = COUNT(fact_enrollment[student_key])
+			VAR TotalStudentsAllRaces = CALCULATE(COUNT(fact_enrollment[student_key]), ALL(dim_race))
+			RETURN
+			    DIVIDE(StudentsInSelectedRace, TotalStudentsAllRaces, 0)
+		lineageTag: 1e9b7880-e093-4cbe-82ea-98a5719b2457
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '% Students by Socioeconomic' = ```
+			
+			VAR TotalStudentsInContext = SUM(fact_enrollment[enrollment_count])
+			VAR TotalStudentsAllSES = 
+			    CALCULATE(
+			        SUM(fact_enrollment[enrollment_count]), 
+			        ALL(dim_socioeconomic_status)
+			    )
+			RETURN 
+			    DIVIDE(TotalStudentsInContext, TotalStudentsAllSES, 0)
+			```
+		lineageTag: ce912785-fc4b-4158-8bf8-9861ba3978a8
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '% Students by Gender' =
+			
+			DIVIDE(
+			    COUNTROWS(dim_student),
+			    CALCULATE(COUNTROWS(dim_student), ALL(dim_student[gender]))
+			) * 100
+		lineageTag: 2802ad1d-c3d1-4c06-a9df-c7a481680203
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '% Students by Religion' =
+			
+			DIVIDE(
+			    DISTINCTCOUNT(fact_enrollment[student_key]),
+			    CALCULATE(
+			        DISTINCTCOUNT(fact_enrollment[student_key]),
+			        ALL(dim_religion[religion_name])
+			    )
+			) * 100
+		lineageTag: 02f5e913-f5c3-403c-88ec-b0f897ec63ff
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Enrollment Growth %' = ```
+			
+			-- 1. Get the Years dynamically from the Enrollment table
+			VAR LatestYear = MAX(fact_enrollment[academic_year])
+			VAR PriorYear = 
+			    CALCULATE(
+			        MAX(fact_enrollment[academic_year]), 
+			        ALL(fact_enrollment[academic_year]), 
+			        fact_enrollment[academic_year] < LatestYear
+			    )
+			
+			-- 2. Calculate Current Enrollment (SQL: 9,900)
+			VAR CurrentEnrollment = 
+			    CALCULATE(
+			        DISTINCTCOUNT(fact_enrollment[student_key]), 
+			        fact_enrollment[academic_year] = LatestYear
+			    )
+			
+			-- 3. Calculate Previous Enrollment (SQL: 10,800)
+			VAR PreviousEnrollment = 
+			    CALCULATE(
+			        DISTINCTCOUNT(fact_enrollment[student_key]), 
+			        REMOVEFILTERS(fact_enrollment[academic_year]),
+			        fact_enrollment[academic_year] = PriorYear
+			    )
+			
+			-- 4. Result (SQL: -0.0833)
+			RETURN
+			DIVIDE(CurrentEnrollment - PreviousEnrollment, PreviousEnrollment, 0)
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 3ff7d54c-eb94-4401-a188-214a2248cbb1
+
+	measure 'Student Attrition Rate %' =
+			
+			DIVIDE(
+			    [Student Attrition YTD],
+			    CALCULATE(
+			        DISTINCTCOUNT(dim_student[student_key]),
+			        ALL(dim_student)
+			    )
+			) * 100
+		lineageTag: fcaa3b1f-a14f-4170-88a4-1595c0d71393
+
+	measure 'Student Attrition PYTD' =
+			
+			CALCULATE(
+			    DISTINCTCOUNT(dim_student[student_key]),
+			    dim_student[current_status] = "Left",
+			    SAMEPERIODLASTYEAR(DATESYTD(dim_date[full_date]))
+			)
+		formatString: 0
+		lineageTag: 72024393-fec3-4b83-bc63-5242726a4321
+
+	measure 'Student Attrition YTD' =
+			
+			CALCULATE(
+			    DISTINCTCOUNT(dim_student[student_key]),
+			    dim_student[current_status] = "Left",
+			    DATESYTD(dim_date[full_date])
+			)
+		formatString: 0
+		lineageTag: bd2225d8-0bba-4fd1-adf0-75c9ed3663cb
+
+	measure 'Enrollment PYTD' =
+			
+			CALCULATE(
+			    [Enrollment YTD],
+			    SAMEPERIODLASTYEAR(dim_date[full_date])
+			)
+		lineageTag: df9a8a7e-4341-4bfb-b66a-0af741791b73
+
+	measure 'Enrollment YTD' =
+			
+			TOTALYTD(
+			    sum(fact_enrollment[enrollment_count]),
+			    dim_date[full_date]
+			)
+		formatString: 0
+		lineageTag: 7b938166-846c-435b-a83e-5c71bc357cc2
+
+	measure 'Student Growth %' =
+			
+			VAR CurrentYearStudents =
+			    CALCULATE(
+			        DISTINCTCOUNT(dim_student[student_key]),
+			        dim_student[academic_year] = MAX(dim_student[academic_year])
+			    )
+			
+			VAR PreviousYearStudents =
+			    CALCULATE(
+			        DISTINCTCOUNT(dim_student[student_key]),
+			        dim_student[academic_year] = MAX(dim_student[academic_year]) - 1
+			    )
+			
+			RETURN
+			DIVIDE(
+			    CurrentYearStudents - PreviousYearStudents,
+			    PreviousYearStudents
+			) * 100
+		formatString: 0
+		lineageTag: 4a4a3041-a320-4e96-b4d5-774fcb7d667b
+
+	measure Date = "As of date: " & FORMAT(TODAY(), "MM-DD-YYYY")
+		lineageTag: 39bc9ff2-a25c-40cd-8bc8-07ae1c77740e
+
+	measure '% of Boys' = ```
+			
+			VAR MaleCount = 
+			    CALCULATE(
+			        DISTINCTCOUNT(fact_enrollment[student_key]), 
+			        dim_student[gender] = "M"
+			    )
+			VAR TotalStudents = 
+			    CALCULATE(
+			        DISTINCTCOUNT(fact_enrollment[student_key]), 
+			        ALL(dim_student[gender])
+			    )
+			RETURN 
+			    DIVIDE(MaleCount, TotalStudents, 0)
+			```
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 33ccfb55-b177-437a-b546-5f318a8821b6
+
+	measure '% of Girls' = ```
+			
+			VAR FemaleCount = 
+			    CALCULATE(
+			        DISTINCTCOUNT(fact_enrollment[student_key]), 
+			        dim_student[gender] = "F"
+			    )
+			VAR TotalStudents = 
+			    CALCULATE(
+			        DISTINCTCOUNT(fact_enrollment[student_key]), 
+			        ALL(dim_student[gender]) -- This clears the 'F' filter to get the total
+			    )
+			RETURN 
+			    DIVIDE(FemaleCount, TotalStudents, 0)
+			```
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 6d9844ea-31ae-46ab-bde2-b7925292f229
+
+	measure '% of Gender per School' = ```
+			
+			VAR CurrentGenderCount = DISTINCTCOUNT(fact_enrollment[student_key])
+			VAR TotalInSchool = 
+			    CALCULATE(
+			        DISTINCTCOUNT(fact_enrollment[student_key]), 
+			        ALL(dim_student[gender])
+			    )
+			RETURN 
+			    DIVIDE(CurrentGenderCount, TotalInSchool, 0)
+			```
+		lineageTag: e2ccb006-b40f-468f-9fa8-d9c2394ed4d9
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Measure
+		lineageTag: 9055ee3d-e0e1-439d-b9f7-3ea80bef3934
+
+		annotation 43dbc3e8-3a1c-4b6f-9923-b49ff7d6691c = True
+
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: 2bbd79f9-d3f2-4372-9eb5-b78ca7476864
+		summarizeBy: none
+		sourceColumn: id
+
+		annotation SummarizationSetBy = User
+
+	column date_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 9014a61a-a376-4ed4-af1f-5bd4f4713b71
+		summarizeBy: none
+		sourceColumn: date_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column student_key
+		dataType: int64
+		formatString: 0
+		lineageTag: fd24ac1c-e78d-4e6a-af2b-ef2570234e78
+		summarizeBy: none
+		sourceColumn: student_key
+
+		annotation SummarizationSetBy = User
+
+	column school_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 33a377a5-30f1-4cea-9dd9-da5e153fc853
+		summarizeBy: none
+		sourceColumn: school_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column academic_year
+		dataType: string
+		lineageTag: 214e7601-d19f-4195-8e6f-c4ef9dcf1592
+		summarizeBy: none
+		sourceColumn: academic_year
+
+		annotation SummarizationSetBy = Automatic
+
+	column race_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 09f87e09-056f-4bc2-a3b6-a3c145060951
+		summarizeBy: none
+		sourceColumn: race_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column religion_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 26ad96a7-1310-4e4d-b3b2-e96a3eda1801
+		summarizeBy: none
+		sourceColumn: religion_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column socioeconomic_status_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 109d164a-eec0-4a9c-a653-eff7debc4526
+		summarizeBy: none
+		sourceColumn: socioeconomic_status_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column enrollment_count
+		dataType: int64
+		formatString: 0
+		lineageTag: ffe57478-3001-41c7-8198-a42ec4e34333
+		summarizeBy: none
+		sourceColumn: enrollment_count
+
+		annotation SummarizationSetBy = User
+
+	column created_by
+		dataType: string
+		lineageTag: e05b734f-1ee2-49f0-a3b1-ea574db9cc18
+		summarizeBy: none
+		sourceColumn: created_by
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 948d01e9-2166-4eba-948c-67224e28184e
+		summarizeBy: none
+		sourceColumn: created_at
+
+		variation Variation
+			isDefault
+			relationship: 6844a503-9f1a-4c3e-9866-4246bfb1c33f
+			defaultHierarchy: LocalDateTable_d470a59f-e362-4393-961b-3ddceb822fe0.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_by
+		dataType: string
+		lineageTag: 97d2fcb0-90f0-4edc-a3fa-de84ed15f51c
+		summarizeBy: none
+		sourceColumn: updated_by
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 593f2578-3265-4977-aded-a0b9aceba0e0
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		variation Variation
+			isDefault
+			relationship: 5e9b0b28-563f-4f33-95a2-db31108d1f9f
+			defaultHierarchy: LocalDateTable_edc21ae7-4027-4dff-b806-9a38fb5c7066.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column grade_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 1aab2446-1aa3-4a32-bb78-eac833d0b703
+		summarizeBy: none
+		sourceColumn: grade_key
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_enrollment = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("10.10.10.73", "school_db_olap_final"),
+				    dbo_v_fact_enrollment = Source{[Schema="dbo",Item="v_fact_enrollment"]}[Data],
+				    #"Reordered Columns" = Table.ReorderColumns(dbo_v_fact_enrollment,{"id", "date_key", "student_key", "school_key", "academic_year", "race_id", "religion_id", "socioeconomic_status_id", "enrollment_count", "created_by", "created_at", "updated_by", "updated_at"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Reordered Columns",{{"race_id", "race_key"}, {"religion_id", "religion_key"}, {"socioeconomic_status_id", "socioeconomic_status_key"}}),
+				    #"Reordered Columns1" = Table.ReorderColumns(#"Renamed Columns",{"id", "date_key", "grade_key", "student_key", "school_key", "race_key", "religion_key", "socioeconomic_status_key", "academic_year", "enrollment_count", "created_by", "created_at", "updated_by", "updated_at"})
+				in
+				    #"Reordered Columns1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,397 @@
+table fact_assessment
+	lineageTag: 4f37a90b-6348-4aff-b885-04276f8ed20c
+
+	measure 'Average GPA' =
+			
+			DIVIDE(
+			    SUM(fact_assessment[marks_obtained]),
+			    COUNT(dim_student[student_key])
+			)
+		lineageTag: bb1c31f7-2a0d-4aaa-9338-9741d8feeb39
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Performance by socieoeconomics status %' =
+			
+			DIVIDE(
+			    CALCULATE(
+			        DISTINCTCOUNT(dim_socioeconomic_status[StatusName]),
+			        fact_assessment[marks_obtained] = "Pass"
+			    ),
+			    DISTINCTCOUNT(dim_socioeconomic_status[StatusName])
+			) * 100
+		formatString: 0
+		lineageTag: 807b232e-f942-47ff-bb5e-94a7d72f60a4
+
+	measure 'Perforance by Gender %' =
+			
+			DIVIDE(
+			    CALCULATE(
+			        DISTINCTCOUNT(dim_student[gender]),
+			        fact_assessment[marks_obtained] = "Pass"
+			    ),
+			    DISTINCTCOUNT(dim_student[gender])
+			) * 100
+		formatString: 0
+		lineageTag: 6ab43ee4-92f0-4f48-bf7f-58923cf44435
+
+	measure 'performance by race %' =
+			
+			DIVIDE(
+			    CALCULATE(
+			        DISTINCTCOUNT(dim_student[student_key]),
+			        FILTER(
+			            fact_assessment,
+			            DIVIDE(
+			                fact_assessment[marks_obtained],
+			                RELATED(dim_assessment[max_marks])
+			            ) * 100 > 50
+			        )
+			    ),
+			    DISTINCTCOUNT(dim_student[student_key])
+			) * 100
+		lineageTag: cbb713e3-ee17-4973-9435-a29d7b7a3396
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Pass Fail Summary' = ```
+			
+			VAR PassThreshold = 0.50 
+			
+			-- 1. Calculate Total Valid Assessments (Filter out rows with 0 or NULL max_marks)
+			VAR TotalAssessments = 
+			    COUNTROWS(
+			        FILTER(
+			            fact_assessment, 
+			            RELATED(dim_assessment[max_marks]) > 0
+			        )
+			    )
+			
+			-- 2. Calculate Pass Count
+			VAR PassCount = 
+			    SUMX(
+			        fact_assessment,
+			        VAR MaxMarks = RELATED(dim_assessment[max_marks])
+			        RETURN
+			        IF(
+			            MaxMarks > 0 && 
+			            DIVIDE(fact_assessment[marks_obtained], MaxMarks) >= PassThreshold,
+			            1,
+			            0
+			        )
+			    )
+			
+			-- 3. Calculate Rates
+			VAR PassRate = DIVIDE(PassCount, TotalAssessments, 0) * 100
+			VAR FailRate = 100 - PassRate
+			
+			RETURN 
+			"Pass: " & FORMAT(PassRate, "0.0") & "% | Fail: " & FORMAT(FailRate, "0.0") & "%"
+			```
+		lineageTag: 607598c7-d079-43d1-ae8e-205d6bde7d72
+
+	measure '% Students Proficient ELL' =
+			
+			DIVIDE(
+			    CALCULATE(
+			        COUNT(dim_student[student_key]),
+			        dim_subject[subject_name] = "English"
+			    ),
+			    COUNT(dim_student[student_key])
+			) * 100
+		lineageTag: 94f8b791-419c-485d-8f5c-f6140f26c138
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Board Exam Pass Rate' =
+			
+			DIVIDE(
+			    CALCULATE(COUNT(dim_student[student_key]), fact_assessment[marks_obtained] = "Pass"),
+			    COUNT(fact_assessment[student_key])
+			) * 100
+		formatString: 0
+		lineageTag: cc6fd952-b39b-4790-9111-7b116c20f27a
+
+	measure 'Pass % Growth YoY' = ```
+			
+			-- 1. Dynamically find the latest year and the one before it
+			VAR LatestYear = MAX(fact_assessment[academic_year])
+			VAR PriorYear = 
+			    CALCULATE(
+			        MAX(fact_assessment[academic_year]), 
+			        ALL(fact_assessment[academic_year]), 
+			        fact_assessment[academic_year] < LatestYear
+			    )
+			VAR PassThreshold = 0.50
+			
+			-- 2. Calculate Pass Rate for the Latest Year
+			VAR CurrentPassRate = 
+			    CALCULATE(
+			        DIVIDE(
+			            COUNTROWS(FILTER(fact_assessment, fact_assessment[marks_obtained] >= (RELATED(dim_assessment[max_marks]) * PassThreshold))),
+			            COUNTROWS(fact_assessment)
+			        ),
+			        fact_assessment[academic_year] = LatestYear
+			    )
+			
+			-- 3. Calculate Pass Rate for the Prior Year (Ignoring current filters)
+			VAR PreviousPassRate = 
+			    CALCULATE(
+			        DIVIDE(
+			            COUNTROWS(FILTER(fact_assessment, fact_assessment[marks_obtained] >= (RELATED(dim_assessment[max_marks]) * PassThreshold))),
+			            COUNTROWS(fact_assessment)
+			        ),
+			        REMOVEFILTERS(fact_assessment[academic_year]),
+			        fact_assessment[academic_year] = PriorYear
+			    )
+			
+			RETURN 
+			IF(ISBLANK(PreviousPassRate), 0, CurrentPassRate - PreviousPassRate)
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: d91b9904-a9e8-4a80-88ce-9f996f9e0686
+
+	measure 'Board Pass % (10,11,12)' = ```
+			
+			VAR PassingThreshold = 0.50 -- 40%
+			VAR BoardGrades = {10, 11, 12}
+			
+			VAR AssessmentStatus = 
+			    ADDCOLUMNS(
+			        CALCULATETABLE(
+			            fact_assessment,
+			            dim_grade[id] IN BoardGrades
+			        ),
+			        "ScorePct", DIVIDE(fact_assessment[marks_obtained], RELATED(dim_assessment[max_marks]))
+			    )
+			
+			VAR PassedCount = COUNTROWS(FILTER(AssessmentStatus, [ScorePct] >= PassingThreshold))
+			VAR TotalCount = COUNTROWS(AssessmentStatus)
+			
+			RETURN 
+			    DIVIDE(PassedCount, TotalCount, 0)
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: bd3e23bc-2c69-48c7-b1bc-8bca444e65b6
+
+	measure 'Total Exam Marks' =
+			
+			SUMX(
+			    KEEPFILTERS(VALUES(dim_student[id])),
+			    CALCULATE(SUM(fact_assessment[marks_obtained]))+0
+			)
+		formatString: 0
+		lineageTag: a19e2661-e3e6-40f9-a14c-29bf703a7300
+
+	measure 'Total Max Marks' = ```
+			
+			SUMX(
+			    fact_assessment, 
+			    RELATED(dim_assessment[max_marks])
+			)
+			```
+		lineageTag: e77625d2-2f3f-4905-8f25-eb2b3a9dfd50
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Assessment Percentage' =
+			
+			DIVIDE(
+			    [Total Exam Marks], -- Your existing SUMX measure
+			    [Total Max Marks],
+			    0
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 7035f888-288c-43d6-8536-7b2ceb7f1142
+
+	measure 'Fail Rate' =
+			
+			VAR PassThreshold = 0.50
+			
+			-- Total Valid Assessments
+			VAR TotalAssessments =
+			    COUNTROWS(
+			        FILTER(
+			            fact_assessment,
+			            COALESCE(RELATED(dim_assessment[max_marks]), 0) > 0
+			        )
+			    )
+			
+			-- Fail Count
+			VAR FailCount =
+			    SUMX(
+			        fact_assessment,
+			        VAR MaxMarks = COALESCE(RELATED(dim_assessment[max_marks]), 0)
+			        VAR MarksObtained = COALESCE(fact_assessment[marks_obtained], 0)
+			        RETURN
+			        IF(
+			            MaxMarks > 0 &&
+			            DIVIDE(MarksObtained, MaxMarks, 0) < PassThreshold,
+			            1,
+			            0
+			        )
+			    )
+			
+			RETURN
+			DIVIDE(FailCount, TotalAssessments, 0) * 100
+		lineageTag: 4787afdc-e9f8-42a1-8afa-2bc515508e93
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Pass Rate' =
+			
+			VAR PassThreshold = 0.50
+			
+			-- Total Valid Assessments
+			VAR TotalAssessments =
+			    COUNTROWS(
+			        FILTER(
+			            fact_assessment,
+			            COALESCE(RELATED(dim_assessment[max_marks]),0) > 0
+			        )
+			    )
+			
+			-- Pass Count
+			VAR PassCount =
+			    SUMX(
+			        fact_assessment,
+			        VAR MaxMarks = RELATED(dim_assessment[max_marks])
+			        RETURN
+			        IF(
+			            MaxMarks > 0 &&
+			            DIVIDE(fact_assessment[marks_obtained], MaxMarks) >= PassThreshold,
+			            1,
+			            0
+			        )
+			    )
+			
+			RETURN
+			DIVIDE(PassCount, TotalAssessments, 0) * 100
+		lineageTag: 89acfebd-5132-4af8-a56f-f3a084ce1e8a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: 47ac9478-ab4b-4520-984c-7f40d9f5036e
+		summarizeBy: none
+		sourceColumn: id
+
+		annotation SummarizationSetBy = User
+
+	column date_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 8a14ceb0-190c-4cf7-b8cc-9219857fbb7f
+		summarizeBy: none
+		sourceColumn: date_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column student_key
+		dataType: int64
+		formatString: 0
+		lineageTag: a8e4c404-35a5-49fd-882d-3a7c77125b09
+		summarizeBy: none
+		sourceColumn: student_key
+
+		annotation SummarizationSetBy = User
+
+	column subject_key
+		dataType: int64
+		formatString: 0
+		lineageTag: c29dae2f-7766-45c6-b494-814da5634235
+		summarizeBy: none
+		sourceColumn: subject_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column school_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 7d9a06c0-088b-4283-bb2c-0dbb4e0e48f2
+		summarizeBy: none
+		sourceColumn: school_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column assessment_type_key
+		dataType: int64
+		formatString: 0
+		lineageTag: b127b824-1a29-4ff2-95be-f82cf0f8f1cb
+		summarizeBy: none
+		sourceColumn: assessment_type_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column assessment_key
+		dataType: int64
+		formatString: 0
+		lineageTag: f20bf95a-36b6-4120-9938-37c806ef9901
+		summarizeBy: none
+		sourceColumn: assessment_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column academic_year
+		dataType: string
+		lineageTag: 0e71e46b-5e74-40f3-b167-b19bc608c558
+		summarizeBy: none
+		sourceColumn: academic_year
+
+		annotation SummarizationSetBy = Automatic
+
+	column marks_obtained
+		dataType: int64
+		formatString: 0
+		lineageTag: 97e1c1e2-3394-4df8-9c7f-b429ff8863b3
+		summarizeBy: sum
+		sourceColumn: marks_obtained
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_by
+		dataType: string
+		lineageTag: 49ff6eee-835b-4739-b65e-7630f4dae5bd
+		summarizeBy: none
+		sourceColumn: created_by
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 408ec7e4-3b18-45a6-af44-dd2b08801747
+		summarizeBy: none
+		sourceColumn: created_at
+
+		variation Variation
+			isDefault
+			relationship: e4369450-ccc0-43e4-8a22-355d741883d9
+			defaultHierarchy: LocalDateTable_a5ef12b6-ee5d-451e-b601-3aa01ded8743.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column grade_key
+		dataType: int64
+		formatString: 0
+		lineageTag: b1588c19-81dc-4652-8fec-7b582ebb24a9
+		summarizeBy: none
+		sourceColumn: grade_key
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_assessment = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("10.10.10.73", "school_db_olap_final"),
+				    dbo_v_fact_assessment = Source{[Schema="dbo",Item="v_fact_assessment"]}[Data]
+				in
+				    dbo_v_fact_assessment
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,264 @@
+table fact_teaching_assignment
+	lineageTag: cba0e78b-0390-4c3d-97a6-c401623193da
+
+	measure 'Students FLL' =
+			
+			VAR CurrentSubject = SELECTEDVALUE(dim_subject[subject_name])
+			RETURN
+			IF(
+			    ISINSCOPE(dim_subject[subject_name]),
+			    -- This part runs for the Table/Bar Chart rows
+			    DISTINCTCOUNT(fact_teaching_assignment[student_key]),
+			    -- This part runs for the Card (or the Table Total row)
+			    CALCULATE(
+			        DISTINCTCOUNT(fact_teaching_assignment[student_key]),
+			        dim_subject[subject_name] = "Foriegn Language"
+			    )
+			)
+		formatString: 0
+		lineageTag: e9aba0f9-4299-41fc-a5c4-4950ff12cb9f
+
+	measure 'Students RLL' =
+			
+			VAR CurrentSubject = SELECTEDVALUE(dim_subject[subject_name])
+			RETURN
+			IF(
+			    ISINSCOPE(dim_subject[subject_name]),
+			    -- This part runs for the Table/Bar Chart rows
+			    DISTINCTCOUNT(fact_teaching_assignment[student_key]),
+			    -- This part runs for the Card (or the Table Total row)
+			    CALCULATE(
+			        DISTINCTCOUNT(fact_teaching_assignment[student_key]),
+			        dim_subject[subject_name] = "Regional Language"
+			    )
+			)
+		formatString: 0
+		lineageTag: 8571e204-764e-44a7-9f64-a39901965a71
+
+	measure 'Students NLL' =
+			
+			VAR CurrentSubject = SELECTEDVALUE(dim_subject[subject_name])
+			RETURN
+			IF(
+			    ISINSCOPE(dim_subject[subject_name]),
+			    -- This part runs for the Table/Bar Chart rows
+			    DISTINCTCOUNT(fact_teaching_assignment[student_key]),
+			    -- This part runs for the Card (or the Table Total row)
+			    CALCULATE(
+			        DISTINCTCOUNT(fact_teaching_assignment[student_key]),
+			        dim_subject[subject_name] = "National Language"
+			    )
+			)
+		formatString: 0
+		lineageTag: edb601d5-8e21-4e9e-ace8-92645b18d776
+
+	measure '% Teachers by Gender' = ```
+			
+			VAR CurrentGenderTeachers = DISTINCTCOUNT(fact_teaching_assignment[staff_key])
+			VAR TotalActiveTeachers = 
+			    CALCULATE(
+			        DISTINCTCOUNT(fact_teaching_assignment[staff_key]), 
+			        ALL(dim_staff[gender])
+			    )
+			RETURN
+			DIVIDE(CurrentGenderTeachers, TotalActiveTeachers, 0)
+			```
+		lineageTag: d61349b6-ef99-4db1-8be2-f901d30ab958
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '% Teachers by Race' = ```
+			
+			VAR CurrentRaceTeachers = DISTINCTCOUNT(fact_teaching_assignment[staff_key])
+			VAR TotalActiveTeachers = 
+			    CALCULATE(
+			        DISTINCTCOUNT(fact_teaching_assignment[staff_key]), 
+			        ALL(dim_race[race_name])
+			    )
+			RETURN
+			DIVIDE(CurrentRaceTeachers, TotalActiveTeachers, 0)
+			```
+		lineageTag: ad295e21-51ca-4d23-a1b7-9083f9297827
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Student Teacher Ratio' =
+			
+			DIVIDE(
+			    DISTINCTCOUNT(dim_student[student_key]),
+			    DISTINCTCOUNT(dim_staff[staff_id])
+			)
+		formatString: 0
+		lineageTag: c268c894-ee79-45a8-af9c-96ce2f0055ad
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Student Teacher Ratio Growth %' =
+			
+			VAR CurrentStudents =
+			    CALCULATE(
+			        DISTINCTCOUNT(dim_student[student_key]),
+			        YEAR(dim_student[admission_date]) = YEAR(TODAY())
+			    )
+			
+			VAR PreviousStudents =
+			    CALCULATE(
+			        DISTINCTCOUNT(dim_student[student_key]),
+			        YEAR(dim_student[admission_date]) = YEAR(TODAY()) - 1
+			    )
+			
+			VAR Teachers =
+			    DISTINCTCOUNT(dim_staff[staff_id])
+			
+			VAR CurrentRatio =
+			    DIVIDE(CurrentStudents, Teachers)
+			
+			VAR PreviousRatio =
+			    DIVIDE(PreviousStudents, Teachers)
+			
+			RETURN
+			DIVIDE(
+			    CurrentRatio - PreviousRatio,
+			    PreviousRatio
+			) * 100
+		lineageTag: 3bfde9de-990f-445f-979e-2b79c3061c48
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '% Teachers by Socioeconomic status' =
+			
+			DIVIDE(
+			    COUNTROWS(dim_staff),
+			    CALCULATE(COUNTROWS(dim_staff), ALL(dim_socioeconomic_status[id]))
+			) * 100
+		lineageTag: 890c8060-bb55-40ab-ad90-d2accb682e54
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: 07d44bc2-ff17-475a-b2c2-f5821d2d0d6a
+		summarizeBy: none
+		sourceColumn: id
+
+		annotation SummarizationSetBy = User
+
+	column date_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 19ec592a-43f2-4b98-98d8-94a557baadf5
+		summarizeBy: none
+		sourceColumn: date_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column staff_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 77410a87-36ae-4feb-b0e9-615fae9a1c03
+		summarizeBy: none
+		sourceColumn: staff_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column grade_key
+		dataType: int64
+		formatString: 0
+		lineageTag: a9903654-a3b0-40ac-a150-6bd024f28020
+		summarizeBy: none
+		sourceColumn: grade_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column subject_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 4644568e-1441-4dea-96a6-582ba945b73d
+		summarizeBy: none
+		sourceColumn: subject_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column student_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 170b70f6-1682-477c-b3dc-f483cd034fbc
+		summarizeBy: none
+		sourceColumn: student_key
+
+		annotation SummarizationSetBy = User
+
+	column school_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 10768f70-d3ef-4b09-96b3-ba81295d362c
+		summarizeBy: none
+		sourceColumn: school_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column staff_race_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 77e93350-e95f-49d5-8b1e-dc9b0743919e
+		summarizeBy: none
+		sourceColumn: staff_race_key
+
+		annotation SummarizationSetBy = User
+
+	column staff_religion_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 8e1dc7e7-a4af-4977-88cc-b72e9d09e321
+		summarizeBy: none
+		sourceColumn: staff_religion_key
+
+		annotation SummarizationSetBy = User
+
+	column socioeconomic_status_key
+		dataType: int64
+		formatString: 0
+		lineageTag: dfa321d7-93a0-4ad1-b204-1007aca5abed
+		summarizeBy: none
+		sourceColumn: socioeconomic_status_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_by
+		dataType: string
+		lineageTag: f8dafdd4-b870-43a3-ae07-185d0219d2bb
+		summarizeBy: none
+		sourceColumn: created_by
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: be30ec7b-abd1-4da6-a1f6-46ae331c38d0
+		summarizeBy: none
+		sourceColumn: created_at
+
+		variation Variation
+			isDefault
+			relationship: 3f2a8be3-6c2f-4a64-a41c-d257f0026671
+			defaultHierarchy: LocalDateTable_7708c12c-0712-4e2f-8068-c44a94a7816a.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_teaching_assignment = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("10.10.10.73", "school_db_olap_final"),
+				    dbo_v_fact_teaching_assignment = Source{[Schema="dbo",Item="v_fact_teaching_assignment"]}[Data],
+				    #"Reordered Columns" = Table.ReorderColumns(dbo_v_fact_teaching_assignment,{"id", "date_key", "staff_key", "grade_key", "subject_key", "student_key", "school_key", "staff_race_id", "staff_religion_id", "socioeconomic_status_id", "created_by", "created_at"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Reordered Columns",{{"staff_race_id", "staff_race_key"}, {"staff_religion_id", "staff_religion_key"}, {"socioeconomic_status_id", "socioeconomic_status_key"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
